@@ -1,41 +1,41 @@
 {
   "system": "MantiQ-Auth (SealPACS)",
-  "timestamp": "2026-06-09T20:10:35",
+  "timestamp": "2026-06-10T00:11:58",
   "stages": {
     "image_acquisition": {
       "image_count": 10,
-      "time_seconds": 117.589,
+      "time_seconds": 69.646,
       "source": "TCIA"
     },
     "feature_extraction": {
       "model": "ResNet-18",
       "feature_dim": 512,
       "feature_norm": 1.0,
-      "time_ms": 726.02,
+      "time_ms": 348.49,
       "image": "00000001.dcm"
     },
     "robust_hash": {
-      "hash": "361e089ac688a724655aa6c173d01859bc1d7e7e0caffbf67964d620d7cd36cb",
+      "hash": "5a4530d0223c3b8a78083b3fe4785c4211eb7c0f9e49cc4dfa07167a94326a48",
       "algorithm": "SHA3-256",
       "hash_length_chars": 64,
       "deterministic": true,
-      "time_ms": 117.54
+      "time_ms": 80.98
     },
     "hybrid_signature": {
       "combiner": "concatenation",
-      "total_size_bytes": 3384,
-      "ecdsa_sig_bytes": 71,
+      "total_size_bytes": 3383,
+      "ecdsa_sig_bytes": 70,
       "mldsa_sig_bytes": 3309,
-      "signing_time_ms": 12.01,
-      "ecdsa_keygen_ms": 5.62,
-      "mldsa_keygen_ms": 22.94
+      "signing_time_ms": 7.49,
+      "ecdsa_keygen_ms": 2.95,
+      "mldsa_keygen_ms": 14.35
     },
     "verification": {
       "overall": true,
       "hash_match": true,
       "ecdsa_valid": true,
       "mldsa_valid": true,
-      "verification_time_ms": 108.77
+      "verification_time_ms": 77.21
     },
     "uniqueness": {
       "images_tested": 5,

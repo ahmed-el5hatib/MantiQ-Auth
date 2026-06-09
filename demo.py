@@ -34,9 +34,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 # Prevent UnicodeEncodeError on Windows PowerShell by forcing UTF-8 encoding
 if sys.platform.startswith('win'):
-    import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 from src.utils import Timer, save_json, setup_logging
 

@@ -61,6 +61,9 @@ def extract_signature_payload(dataset: Dataset) -> Optional[Dict[str, any]]:
         
         # Parse scheme
         scheme_val = block[0x10].value
+        if isinstance(scheme_val, bytes):
+            scheme_val = scheme_val.decode("utf-8", errors="ignore").strip()
+            
         combiner = scheme_val.split(":")[0] if ":" in scheme_val else "concatenation"
         
         combined_sig_bytes = block[0x40].value
@@ -68,13 +71,25 @@ def extract_signature_payload(dataset: Dataset) -> Optional[Dict[str, any]]:
         # Parse combined bytes back into HybridSignature
         sig = parse_combined_signature(combined_sig_bytes, combiner=combiner)
         
+        bch_params = block[0x20].value
+        if isinstance(bch_params, bytes):
+            bch_params = bch_params.decode("utf-8", errors="ignore").strip()
+            
+        robust_hash = block[0x30].value
+        if isinstance(robust_hash, bytes):
+            robust_hash = robust_hash.decode("utf-8", errors="ignore").strip()
+            
+        timestamp = block[0x50].value
+        if isinstance(timestamp, bytes):
+            timestamp = timestamp.decode("utf-8", errors="ignore").strip()
+        
         return {
             "scheme": scheme_val,
             "combiner": combiner,
-            "bch_params": block[0x20].value,
-            "robust_hash": block[0x30].value,
+            "bch_params": bch_params,
+            "robust_hash": robust_hash,
             "signature": sig,
-            "timestamp": block[0x50].value,
+            "timestamp": timestamp,
         }
     except KeyError:
         # Private block or tags don't exist

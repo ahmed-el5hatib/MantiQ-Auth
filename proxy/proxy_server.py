@@ -36,6 +36,19 @@ logger = logging.getLogger("mantiq.proxy")
 gateway = CryptoGateway(feature_extractor="resnet", mldsa_level=65)
 gateway.generate_keys()
 
+# Export public keys to data/pacs/keys.json for offline inspection tools
+try:
+    import json
+    keys_dir = Path(__file__).resolve().parent.parent / "data" / "pacs"
+    keys_dir.mkdir(parents=True, exist_ok=True)
+    with open(keys_dir / "keys.json", "w") as f:
+        json.dump({
+            "ecdsa_public_key": gateway.ecdsa_keypair.public_bytes().hex(),
+            "mldsa_public_key": gateway.mldsa_keypair.public_key.hex(),
+        }, f, indent=2)
+except Exception as e:
+    logger.error("Failed to export keys: %s", e)
+
 
 def forward_to_pacs(dataset: Dataset, file_meta) -> bool:
     """Forward the DICOM dataset to the PACS server on port 11113."""

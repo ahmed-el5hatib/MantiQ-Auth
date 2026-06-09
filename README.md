@@ -98,22 +98,104 @@ At the receiving end, the process is repeated. The image is accepted **if and on
 
 ---
 
+## 🌐 DICOM Crypto-Agile Proxy Middleware
+
+In clinical deployments, upgrading legacy PACS storage servers with custom cryptography is highly impractical. MantiQ-Auth provides a **Crypto-Agile DICOM Proxy** that intercepts network communications (C-STORE requests) between diagnostic modalities and the PACS.
+
+### System Architecture Diagram
+
+```mermaid
+flowchart TD
+    %% Define styles
+    classDef modalityStyle fill:#f5f5f0,stroke:#8c8c8c,stroke-width:2px;
+    classDef proxyStyle fill:#f0f0ff,stroke:#5c5cff,stroke-width:2px;
+    classDef pacsStyle fill:#e6f7ed,stroke:#2eb872,stroke-width:2px;
+    classDef verifyStyle fill:#fff6e6,stroke:#ff9900,stroke-width:2px;
+
+    %% Modality Section
+    Modality["📷 Diagnostic Modality (e.g., CT/X-Ray Scan)<br/>Port 11112 — Sends Raw Unsigned DICOM"]:::modalityStyle
+    
+    %% Proxy Section
+    subgraph Proxy ["🛡️ Cryptographic Proxy Middleware (Port 11112 ➔ 11113)"]
+        direction TB
+        F_Ext["🧠 Feature Extraction (ResNet-18)"] --> R_Hash["🔐 Robust Hash (BCH + SHA3)"]
+        R_Hash --> H_Sign["✍️ Hybrid Sign (ECDSA + ML-DSA-65)"]
+        H_Sign --> Tag_Inj["💉 Inject to Group 0x0009 Private Tags"]
+    end
+    class Proxy proxyStyle;
+
+    %% PACS Section
+    PACS["💾 Legacy PACS Archive Server<br/>Port 11113 — Storage Only (No Crypto Knowledge)"]:::pacsStyle
+
+    %% Verification Section
+    subgraph Verification ["🔍 Intercept & Verification on Retrieval"]
+        direction TB
+        V_Read["1. Extract Private Tags & Parameters"] --> V_Agile["2. Dynamically Detect Scheme (Crypto-Agility)"]
+        V_Agile --> V_Hash["3. Recompute Robust Hash of Pixel Data"]
+        V_Hash --> V_Comp{"4. Verify Signature & Compare Hash"}
+        V_Comp -->|Authentic| V_Pass["✅ Match: Forward to Modality/User"]
+        V_Comp -->|Tampered| V_Block["❌ Mismatch: Block & Reject Transmission"]
+    end
+    class Verification verifyStyle;
+
+    %% Connection Lines
+    Modality -->|Raw C-STORE| Proxy
+    Proxy -->|Signed C-STORE (Standard DICOM format)| PACS
+    PACS -.->|Retrieve Request (C-MOVE/C-GET)| Verification
+    Verification -.->|Delivered to Modality/User| Modality
+
+    %% Footnote Notes
+    note1["💡 Middleware design isolates crypto logic: No changes required on legacy PACS servers."]
+    note2["⚠️ Proxy is a Single Point of Failure (SPOF): High-availability load balancers recommended for clinical redundancy."]
+```
+
+### Network Communication Sequence
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Modality as Diagnostic Modality (mock_modality.py)
+    participant Proxy as Cryptographic Proxy (proxy_server.py)
+    participant PACS as Hospital PACS (mock_pacs.py)
+    
+    Note over Modality, Proxy: DICOM Store Port 11112
+    Modality->>Proxy: C-STORE Request (Raw Unsigned DICOM)
+    Note over Proxy: Extracts Features & Computes Robust Hash<br/>Signs with ECDSA + ML-DSA<br/>Embeds payload into Group 0x0009 Private Tags
+    
+    Note over Proxy, PACS: DICOM Store Port 11113
+    Proxy->>PACS: C-STORE Request (Signed DICOM with Metadata)
+    Note over PACS: Saves Signed DICOM to Archive
+    
+    Note over Proxy: Offline Retrieve / Verification
+    Proxy->>Proxy: Reads Private Tags (Agile Scheme detection)<br/>Recomputes Hash from pixel data<br/>Verifies ECDSA & ML-DSA signatures
+```
+
+---
+
 ## 📁 Directory Structure
 
 ```
 MantiQ-Auth/
-├── data/                              # Datasets (Raw, Processed, Tampered)
+├── data/                              # Datasets (Raw, Processed, Tampered, PACS exports)
 ├── src/                               # Core Crypto and Extractor Modules
 │   ├── feature_extraction.py          # ResNet & ViT feature extractors
 │   ├── robust_hash.py                 # Quantization, BCH, and SHA3 pipeline
 │   ├── hybrid_signatures.py           # ECDSA + ML-DSA hybrid signing
 │   ├── verifier.py                    # Hash-based Authentication Gateway
 │   └── tampering_analysis.py          # Post-hoc SVM analysis (Research Only)
+├── proxy/                             # 📁 Crypto-Agile DICOM Proxy Components
+│   ├── README.md                      # Proxy documentation and network ports
+│   ├── DICOM_HEADER_SPECS.md          # Specs for Group 0x0009 Private Creator tags
+│   ├── dicom_utils.py                 # DICOM header metadata injection/extraction
+│   ├── proxy_server.py                # Store SCP Interceptor Proxy (port 11112)
+│   ├── mock_modality.py               # Simulated scanner client pushing raw DICOMs
+│   └── mock_pacs.py                   # Simulated hospital PACS server (port 11113)
 ├── scripts/                           # Executable Pipelines
+│   ├── run_proxy_benchmark.py         # Benchmarks proxy latency and size overhead
+│   ├── inspect_dicom_crypto.py        # Utility to dump and verify DICOM private tags offline
 │   ├── run_evaluation.py              # Evaluates True Positive / False Positives
-│   ├── organize_data.py               # Structures dataset folders
 │   └── ...                            
-├── MantiQ_Auth_Q1_Final.ipynb         # Interactive complete project demonstration
+├── MantiQ_Auth_Final.ipynb            # Interactive complete project demonstration
 └── config.yaml                        # Global pipeline parameters
 ```
 
@@ -140,14 +222,24 @@ pip install liboqs-python
 ```
 
 ### 3. Run the Demonstration
-The Jupyter Notebook serves as the primary walkthrough of the finalized Q1-grade architecture:
+The Jupyter Notebook serves as the primary walkthrough of the finalized architecture:
 ```bash
-jupyter notebook MantiQ_Auth_Q1_Final.ipynb
+jupyter notebook MantiQ_Auth_Final.ipynb
 ```
 
 Or you can run the command-line evaluation suite to test the cryptographic boundary against tampering and benign distortions:
 ```bash
 python scripts/run_evaluation.py
+```
+
+### 4. Run the Crypto-Agile DICOM Proxy Simulation & Benchmark
+To simulate the network-level DICOM interception and benchmark the latency/size overhead:
+```bash
+python scripts/run_proxy_benchmark.py
+```
+To inspect the embedded cryptographic headers on any signed file in the PACS:
+```bash
+python scripts/inspect_dicom_crypto.py
 ```
 
 ## ⚙️ Configuration

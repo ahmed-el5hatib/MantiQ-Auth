@@ -1,0 +1,66 @@
+# MantiQ-Auth Configuration
+# Quantum-Resistant Medical Image Authentication System
+
+# ─── Data Paths ──────────────────────────────────────────────────────────────
+paths:
+  data_root: "data"
+  dicom_raw: "data/raw/ct"
+  dicom_processed: "data/processed/ct"
+  output: "output"
+  models_cache: "models_cache"
+  metadata_csv: "data/metadata.csv"
+
+# ─── TCIA API Configuration ─────────────────────────────────────────────────
+tcia:
+  base_url: "https://services.cancerimagingarchive.net/nbia-api/services/v4"
+  collection: "LIDC-IDRI"
+  target_image_count: 300
+  max_retries: 3
+  retry_delay_seconds: 2
+  request_delay_seconds: 0.5  # Rate limiting between API calls
+
+# ─── Feature Extraction ─────────────────────────────────────────────────────
+feature_extraction:
+  model: "vit"                  # Options: "vit", "resnet"
+  vit_model: "vit_b_16"        # torchvision ViT variant
+  vit_feature_dim: 384          # ViT-B/16 output dimension sliced to 384-dim (ViT-S equivalent)
+  resnet_model: "resnet18"
+  resnet_feature_dim: 512
+  image_size: 224
+  # ImageNet normalization stats
+  normalize_mean: [0.485, 0.456, 0.406]
+  normalize_std: [0.229, 0.224, 0.225]
+
+# ─── Robust Hashing ─────────────────────────────────────────────────────────
+hashing:
+  quantization_method: "median" # Options: "median", "mean"
+  bch_n: 511                    # BCH code length (must be 2^m - 1)
+  bch_k: 256                    # BCH message length
+  bch_t: 16                     # Error correction capability (upgraded from 8 → 16)
+  hash_algorithm: "sha3_256"    # Final hash algorithm
+  use_median_filter: true       # Pre-quantization median smoothing (Improvement 3)
+  use_feature_norm: true        # Per-dimension normalization (Improvement 3)
+  use_majority_voting: true     # Post-quantization majority voting (Improvement 3)
+
+# ─── Hybrid Signatures ──────────────────────────────────────────────────────
+signatures:
+  ecdsa_curve: "SECP256R1"      # NIST P-256
+  mldsa_level: 65               # ML-DSA security level (44, 65, 87)
+  combiner: "concatenation"     # Options: "concatenation", "silithium"
+
+# ─── Evaluation ──────────────────────────────────────────────────────────────
+evaluation:
+  jpeg_quality_levels: [30, 50, 70, 90]
+  ncc_threshold: 0.93           # Minimum NCC for JPEG Q=70
+  num_test_images: 100
+  benchmark_runs: 5             # Number of runs for timing benchmarks
+
+# ─── Dataset Expansion ───────────────────────────────────────────────────────
+dataset_expansion:
+  target_ct: 200
+  target_mri: 150
+  target_xray: 150
+  total_target: 500
+  metadata_csv: "data/dataset_metadata.csv"
+  processed_dir: "data/dicom_processed"
+

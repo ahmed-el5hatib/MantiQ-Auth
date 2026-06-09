@@ -1,0 +1,3 @@
+# This directory stores DICOM image data.
+# Raw and processed images are gitignored.
+# Run `python scripts/download_tcia_images.py` to populate.

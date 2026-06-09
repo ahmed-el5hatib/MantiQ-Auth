@@ -1,0 +1,54 @@
+# Data files
+data/*
+!data/.gitkeep
+output/*
+!output/.gitkeep
+*.dcm
+*.nii
+*.nii.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Config overrides
+config.local.yaml
+
+# Model weights cache
+models_cache/
+scratch/
+models/

@@ -1,0 +1,45 @@
+{
+  "system": "MantiQ-Auth (SealPACS)",
+  "timestamp": "2026-06-09T00:41:14",
+  "stages": {
+    "image_acquisition": {
+      "image_count": 10,
+      "time_seconds": 25.026,
+      "source": "TCIA"
+    },
+    "feature_extraction": {
+      "model": "ViT-S",
+      "feature_dim": 384,
+      "feature_norm": 1.0,
+      "time_ms": 1387.1,
+      "image": "00000001.dcm"
+    },
+    "robust_hash": {
+      "hash": "15ec76ecc2c3b4a3d9a1c9f05af8e81f73a2af7a68ce5177d251220e7080e59a",
+      "algorithm": "SHA3-256",
+      "hash_length_chars": 64,
+      "deterministic": true,
+      "time_ms": 393.13
+    },
+    "hybrid_signature": {
+      "combiner": "concatenation",
+      "total_size_bytes": 3384,
+      "ecdsa_sig_bytes": 71,
+      "mldsa_sig_bytes": 3309,
+      "signing_time_ms": 8.63,
+      "ecdsa_keygen_ms": 3.62,
+      "mldsa_keygen_ms": 20.33
+    },
+    "verification": {
+      "overall": true,
+      "ecdsa_valid": true,
+      "mldsa_valid": true,
+      "verification_time_ms": 1.23
+    },
+    "uniqueness": {
+      "images_tested": 5,
+      "unique_hashes": 4,
+      "all_unique": false
+    }
+  }
+}

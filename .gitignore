@@ -1,8 +1,8 @@
 # Data files
 data/*
 !data/.gitkeep
-output/*
-!output/.gitkeep
+# output/*
+# !output/.gitkeep
 *.dcm
 *.nii
 *.nii.gz

@@ -55,3 +55,9 @@ models_cache/
 scratch/
 models/
 .pytest_tmp/
+
+# Personal / CV / Profile files
+Ahmed Mahmoud Mohammed_CV.pdf
+*.pdf
+profile_readme/
+

@@ -73,7 +73,7 @@ class CryptoGateway:
 
     def __init__(
         self,
-        feature_extractor: Literal["vit", "resnet"] = "vit",
+        feature_extractor: Literal["vit", "resnet"] = "resnet",
         mldsa_level: int = 65,
         ecdsa_curve: str = "SECP256R1",
         combiner: Literal["concatenation", "silithium"] = "concatenation",

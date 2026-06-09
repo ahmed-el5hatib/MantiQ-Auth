@@ -4,7 +4,7 @@ MantiQ-Auth Demo — Quantum-Resistant Medical Image Authentication
 
 End-to-end demonstration of the MantiQ-Auth (SealPACS) pipeline:
     1. Download/generate test images
-    2. Extract deep features (ViT-B/16)
+    2. Extract deep features (ResNet-18)
     3. Compute robust perceptual hash
     4. Generate hybrid signature (ECDSA-P256 + ML-DSA-65)
     5. Verify the signature
@@ -176,7 +176,7 @@ def run_demo() -> Dict[str, Any]:
     print()
 
     # ── Stage 2: Feature Extraction ─────────────────────────────────────
-    print("🧠 Stage 2: Extracting deep features (ViT-S)...")
+    print("🧠 Stage 2: Extracting deep features (ResNet-18)...")
     print("-" * 50)
 
     from src.feature_extraction import (
@@ -192,29 +192,29 @@ def run_demo() -> Dict[str, Any]:
             tensor = load_and_preprocess_dicom(test_image)
         else:
             tensor = load_and_preprocess_image(test_image)
-        features = extract_features(tensor, extractor="vit")
+        features = extract_features(tensor, extractor="resnet")
 
     feature_dim = len(features)
     feature_norm = float(np.linalg.norm(features))
 
     results["stages"]["feature_extraction"] = {
-        "model": "ViT-S",
+        "model": "ResNet-18",
         "feature_dim": feature_dim,
         "feature_norm": round(feature_norm, 6),
         "time_ms": round(t.elapsed * 1000, 2),
         "image": test_image.name,
     }
 
-    print(f"  Model:         ViT-S (ImageNet pretrained)")
+    print(f"  Model:         ResNet-18 (ImageNet pretrained)")
     print(f"  Feature dim:   {feature_dim}")
     print(f"  L2 norm:       {feature_norm:.6f}")
     print(f"  Time:          {t.elapsed * 1000:.1f} ms")
 
     # Verify expected dimension
-    assert feature_dim == FEATURE_DIMS["vit"], (
-        f"Expected {FEATURE_DIMS['vit']}-dim features, got {feature_dim}"
+    assert feature_dim == FEATURE_DIMS["resnet"], (
+        f"Expected {FEATURE_DIMS['resnet']}-dim features, got {feature_dim}"
     )
-    print(f"  ✅ Dimension check passed ({feature_dim} == {FEATURE_DIMS['vit']})")
+    print(f"  ✅ Dimension check passed ({feature_dim} == {FEATURE_DIMS['resnet']})")
     print()
 
     # ── Stage 3: Robust Hash ────────────────────────────────────────────
@@ -224,10 +224,10 @@ def run_demo() -> Dict[str, Any]:
     from src.robust_hash import compute_robust_hash
 
     with Timer("hash_computation") as t:
-        robust_hash = compute_robust_hash(test_image, feature_extractor="vit")
+        robust_hash = compute_robust_hash(test_image, feature_extractor="resnet")
 
     # Determinism check: compute again and verify identical
-    robust_hash_2 = compute_robust_hash(test_image, feature_extractor="vit")
+    robust_hash_2 = compute_robust_hash(test_image, feature_extractor="resnet")
     deterministic = robust_hash == robust_hash_2
 
     results["stages"]["robust_hash"] = {
@@ -308,7 +308,7 @@ def run_demo() -> Dict[str, Any]:
         verifier = HashBasedVerifier(
             ecdsa_public_key=ecdsa_kp.public_key,
             mldsa_public_key=mldsa_kp.public_key,
-            feature_extractor="vit",
+            feature_extractor="resnet",
             mldsa_level=mldsa_kp.level,
         )
 
@@ -364,7 +364,7 @@ def run_demo() -> Dict[str, Any]:
 
     unique_hashes = set()
     for img_path in image_paths[:5]:
-        h = compute_robust_hash(img_path, feature_extractor="vit")
+        h = compute_robust_hash(img_path, feature_extractor="resnet")
         unique_hashes.add(h)
 
     n_tested = min(5, len(image_paths))

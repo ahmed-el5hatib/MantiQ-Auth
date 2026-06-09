@@ -103,20 +103,20 @@ def compute_enriched_features(
 
 def extract_enriched_features_from_image(
     image_path: Union[str, Path],
-    extractor: str = "vit",
+    extractor: str = "resnet",
 ) -> np.ndarray:
     """
-    Full pipeline: load image → extract ViT features → enrich with extra signals.
+    Full pipeline: load image → extract ResNet features → enrich with extra signals.
 
     Args:
         image_path: Path to the image file.
-        extractor: Feature extractor ("vit" or "resnet").
+        extractor: Feature extractor ("resnet" or "vit").
 
     Returns:
         Enriched feature vector.
     """
     from src.feature_extraction import (
-        extract_features,
+        extract_enriched_resnet_features,
         load_and_preprocess_image,
         load_and_preprocess_dicom,
     )
@@ -127,8 +127,7 @@ def extract_enriched_features_from_image(
     else:
         tensor = load_and_preprocess_image(image_path)
 
-    features = extract_features(tensor, extractor=extractor)
-    return compute_enriched_features(features)
+    return extract_enriched_resnet_features(tensor)
 
 
 # ─── Tampering Classifier ───────────────────────────────────────────────────

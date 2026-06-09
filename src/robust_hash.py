@@ -146,7 +146,7 @@ def apply_majority_voting(bits: np.ndarray, window_size: int = 3) -> np.ndarray:
 
 def apply_bch_encoding(
     binary_bits: np.ndarray,
-    bch_n: int = 511,
+    bch_n: int = 1023,
     bch_t: int = 16,
 ) -> bytes:
     """
@@ -199,10 +199,10 @@ def compute_final_hash(encoded_bytes: bytes, algorithm: str = "sha3_256") -> str
 
 def compute_robust_hash(
     image_path: Union[str, Path],
-    feature_extractor: Literal["vit", "resnet"] = "vit",
+    feature_extractor: Literal["vit", "resnet"] = "resnet",
     quantization_method: Literal["median", "mean"] = "median",
     hash_algorithm: str = "sha3_256",
-    bch_n: int = 511,
+    bch_n: int = 1023,
     bch_t: int = 16,
     use_median_filter: bool = True,
     use_feature_norm: bool = True,
@@ -292,7 +292,7 @@ def compute_ber(bits1: np.ndarray, bits2: np.ndarray) -> float:
 
 def extract_robust_bits(
     image_path: Union[str, Path],
-    feature_extractor: Literal["vit", "resnet"] = "vit",
+    feature_extractor: Literal["vit", "resnet"] = "resnet",
     quantization_method: Literal["median", "mean"] = "median",
     use_median_filter: bool = True,
     use_feature_norm: bool = True,
@@ -340,7 +340,7 @@ def extract_robust_bits(
 
 def get_binary_features(
     image_path: Union[str, Path],
-    feature_extractor: str = "vit",
+    feature_extractor: str = "resnet",
 ) -> np.ndarray:
     """Return raw quantized binary vector (before BCH) for BER calculation."""
     fe = "resnet" if "resnet" in feature_extractor.lower() else "vit"

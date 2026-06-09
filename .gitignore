@@ -54,3 +54,4 @@ config.local.yaml
 models_cache/
 scratch/
 models/
+.pytest_tmp/

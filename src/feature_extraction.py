@@ -341,7 +341,7 @@ def extract_resnet_features(image_tensor: torch.Tensor) -> np.ndarray:
 
 def extract_features(
     image_tensor: torch.Tensor,
-    extractor: Literal["vit", "resnet"] = "vit",
+    extractor: Literal["vit", "resnet"] = "resnet",
 ) -> np.ndarray:
     """
     Extract features using the specified architecture.
@@ -353,12 +353,13 @@ def extract_features(
     Returns:
         L2-normalized feature vector.
     """
-    if extractor == "vit":
-        return extract_vit_features(image_tensor)
-    elif extractor == "resnet":
+    if extractor == "resnet":
+        return extract_resnet_features(image_tensor)
+    elif extractor == "vit":
+        logger.warning("ViT feature extraction is deprecated. Defaulting to ResNet-18.")
         return extract_resnet_features(image_tensor)
     else:
-        raise ValueError(f"Unknown extractor: {extractor}. Use 'vit' or 'resnet'.")
+        raise ValueError(f"Unknown extractor: {extractor}. Use 'resnet'.")
 
 
 # ─── Normalization ──────────────────────────────────────────────────────────

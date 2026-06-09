@@ -427,7 +427,7 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
                 from src.robust_hash import apply_bch_encoding, compute_final_hash
                 
                 # We simulate proper BCH verification where the original ECC bytes are available to correct the attacked bits.
-                def check_hash_match_with_bch(orig_bits, att_bits, bch_n=511, bch_t=16):
+                def check_hash_match_with_bch(orig_bits, att_bits, bch_n=1023, bch_t=16):
                     n_bits = len(orig_bits)
                     pad_len = (8 - n_bits % 8) % 8
                     
@@ -445,20 +445,21 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
                         max_data_len = bch.n // 8
                         
                         o_data = orig_data[:max_data_len]
-                        a_data = att_data[:max_data_len]
+                        a_data = bytearray(att_data[:max_data_len])
                         
                         # Generate original ECC
                         orig_ecc = bch.encode(o_data)
                         
                         # Attempt correction of attacked data using original ECC
-                        bitflips, corr_data, corr_ecc = bch.decode(a_data, orig_ecc)
+                        bitflips = bch.decode(a_data, orig_ecc)
                         
                         if bitflips != -1:
-                            # Correction successful, use corrected data
-                            att_encoded = corr_data + orig_ecc
+                            # Correction successful, apply correction in-place
+                            bch.correct(a_data, bytearray(orig_ecc))
+                            att_encoded = bytes(a_data) + orig_ecc
                         else:
                             # Correction failed, use uncorrected data with original ECC
-                            att_encoded = a_data + orig_ecc
+                            att_encoded = bytes(a_data) + orig_ecc
                             
                         orig_encoded = o_data + orig_ecc
                         

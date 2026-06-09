@@ -21,7 +21,7 @@ tcia:
 
 # ─── Feature Extraction ─────────────────────────────────────────────────────
 feature_extraction:
-  model: "vit"                  # Options: "vit", "resnet"
+  model: "resnet"                  # Options: "vit", "resnet"
   vit_model: "vit_b_16"        # torchvision ViT variant
   vit_feature_dim: 384          # ViT-B/16 output dimension sliced to 384-dim (ViT-S equivalent)
   resnet_model: "resnet18"
@@ -34,7 +34,7 @@ feature_extraction:
 # ─── Robust Hashing ─────────────────────────────────────────────────────────
 hashing:
   quantization_method: "median" # Options: "median", "mean"
-  bch_n: 511                    # BCH code length (must be 2^m - 1)
+  bch_n: 1023                    # BCH code length (must be 2^m - 1)
   bch_k: 256                    # BCH message length
   bch_t: 16                     # Error correction capability (upgraded from 8 → 16)
   hash_algorithm: "sha3_256"    # Final hash algorithm

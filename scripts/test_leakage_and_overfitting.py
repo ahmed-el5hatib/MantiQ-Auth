@@ -26,7 +26,7 @@ from sklearn.svm import SVC
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.feature_extraction import extract_enriched_vit_features, load_and_preprocess_image
+from src.feature_extraction import extract_enriched_resnet_features, load_and_preprocess_image
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s %(message)s")
 logger = logging.getLogger("LeakageTest")
@@ -63,7 +63,7 @@ def main():
         
         try:
             tensor = load_and_preprocess_image(fpath)
-            feat = extract_enriched_vit_features(tensor)
+            feat = extract_enriched_resnet_features(tensor)
             features.append(feat)
             labels.append(int(row["label"]))
             

@@ -74,7 +74,7 @@ def main():
     logger.info("Loaded %d images for attack simulation.", len(images_to_test))
     
     # Initialize gateway & generate keys
-    gateway = CryptoGateway(feature_extractor="vit", mldsa_level=65)
+    gateway = CryptoGateway(feature_extractor="resnet", mldsa_level=65)
     gateway.generate_keys()
     
     # Trackers for results
@@ -104,7 +104,7 @@ def main():
                 
         # 1. Load and process original once
         tensor_orig = load_and_preprocess_image(filepath)
-        feats_orig = extract_features(tensor_orig, extractor="vit")
+        feats_orig = extract_features(tensor_orig, extractor="resnet")
         bits_orig = quantize_to_binary(feats_orig, method="median")
         
         encoded = apply_bch_encoding(bits_orig)
@@ -166,7 +166,7 @@ def main():
         tampered_img.save(temp_tampered_path)
         
         tensor_tamp = load_and_preprocess_image(temp_tampered_path)
-        feats_tamp = extract_features(tensor_tamp, extractor="vit")
+        feats_tamp = extract_features(tensor_tamp, extractor="resnet")
         bits_tamp = quantize_to_binary(feats_tamp, method="median")
         
         ncc_val = compute_ncc(feats_orig, feats_tamp)
@@ -189,7 +189,7 @@ def main():
         legit_img.save(temp_legit_path)
         
         tensor_legit = load_and_preprocess_image(temp_legit_path)
-        feats_legit = extract_features(tensor_legit, extractor="vit")
+        feats_legit = extract_features(tensor_legit, extractor="resnet")
         bits_legit = quantize_to_binary(feats_legit, method="median")
         
         ncc_legit = compute_ncc(feats_orig, feats_legit)

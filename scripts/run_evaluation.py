@@ -30,6 +30,12 @@ from scipy import stats
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.utils import Timer, save_json, setup_logging
 
+# Prevent UnicodeEncodeError on Windows PowerShell by forcing UTF-8 encoding
+if sys.platform.startswith('win'):
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 logger = logging.getLogger("mantiq.eval")
 
 

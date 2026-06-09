@@ -140,9 +140,9 @@ flowchart TD
 
     %% Connection Lines
     Modality -->|Raw C-STORE| Proxy
-    Proxy -->|Signed C-STORE (Standard DICOM format)| PACS
-    PACS -.->|Retrieve Request (C-MOVE/C-GET)| Verification
-    Verification -.->|Delivered to Modality/User| Modality
+    Proxy -->|"Signed C-STORE (Standard DICOM format)"| PACS
+    PACS -.->|"Retrieve Request (C-MOVE / C-GET)"| Verification
+    Verification -.->|"Delivered to Modality / User"| Modality
 
     %% Footnote Notes
     note1["💡 Middleware design isolates crypto logic: No changes required on legacy PACS servers."]

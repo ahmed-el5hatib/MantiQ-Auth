@@ -93,18 +93,13 @@ def main():
     logger.info("Running attacks across test images (optimized loop)...")
     
     for idx, row in enumerate(images_to_test):
-        filepath = Path(row["file_path"])
+        filepath = data_root / row["file_path"]
         patient_id = row["patient_id"]
         original_uid = row["original_uid"]
         
         if not filepath.exists():
-            # Try to map data/dicom_processed to data/processed/ct
-            mapped_str = str(filepath).replace("dicom_processed", "processed/ct")
-            filepath = Path(mapped_str)
-            if not filepath.exists():
-                filepath = Path("..") / filepath
-                if not filepath.exists():
-                    continue
+            logger.warning(f"File not found: {filepath}")
+            continue
                 
         # 1. Load and process original once
         tensor_orig = load_and_preprocess_image(filepath)

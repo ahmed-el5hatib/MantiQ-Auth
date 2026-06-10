@@ -83,67 +83,91 @@ graph TD
 
 ### 1. Feature Extraction
 Let $I$ be the input medical image. We extract a robust, low-dimensional continuous visual feature representation using a frozen, pretrained ResNet-18 model $\Phi$:
-$$
+
+
 f = \Phi(I) \in \mathbb{R}^d
-$$
+
+
 where $d = 512$ represents the feature vector dimensionality.
 
 ### 2. Median Quantization & Perceptual Hashing
 To convert the continuous features into a stable binary vector, we apply median-based quantization. For each element $f_i$ in $f$:
-$$
+
+
 b_i = \begin{cases} 1 & \text{if } f_i \ge \text{median}(f) \\ 0 & \text{if } f_i \lt \text{median}(f) \end{cases} \quad \forall i = 1, \dots, d
-$$
+
+
 This yields a binary fingerprint $b \in \{0, 1\}^d$.
 
 ### 3. BCH Error Correction & Hash Generation
 To tolerate benign distortions (like JPEG compression or noise) while detecting structural content changes, we apply Bose-Chaudhuri-Hocquenghem (BCH) error-correcting codes. Under parameter set $\text{BCH}(1023, 256, t=16)$ with block size $n=1023$, message length $k=256$, and error correction capability $t=16$:
-$$
+
+
 c = \text{BCH\_Encode}(b) \in \{0, 1\}^n
-$$
+
+
 The final robust perceptual hash $\mathcal{H}$ is computed as the SHA3-256 digest of the codeword $c$:
-$$
+
+
 \mathcal{H} = \text{SHA3-256}(c) \in \{0, 1\}^{256}
-$$
+
+
 
 ### 4. Hybrid Signature Generation & Mutually Binding Combiner
 To provide crypto-agile, quantum-resistant authenticity, the perceptual hash is signed using a hybrid scheme. Let $m = \text{SHA256}(\mathcal{H})$ be the signature message digest.
 
 1. **Classical Signature (ECDSA):**
-   $$
+
+
    \sigma_{\text{ECDSA}} = \text{Sign}_{\text{ECDSA}}(m, sk_{\text{ECDSA}})
-   $$
+
+
 2. **Post-Quantum Signature (ML-DSA):**
-   $$
+
+
    \sigma_{\text{ML-DSA}} = \text{Sign}_{\text{ML-DSA}}(m, sk_{\text{ML-DSA}})
-   $$
+
+
 3. **Mutually Binding Combiner (Silithium):**
    To prevent downgrade attacks where an attacker strips the post-quantum signature, the signatures are cryptographically bound using a binding hash $h_{\text{bind}}$:
-   $$
+
+
    h_{\text{bind}} = \text{SHA256}(\sigma_{\text{ECDSA}} \parallel \sigma_{\text{ML-DSA}} \parallel m)
-   $$
-   $$
+
+
+
+
    \sigma_{\text{hybrid}} = \text{len}(\sigma_{\text{ECDSA}}) \parallel \sigma_{\text{ECDSA}} \parallel \text{len}(\sigma_{\text{ML-DSA}}) \parallel \sigma_{\text{ML-DSA}} \parallel h_{\text{bind}}
-   $$
+
+
 
 ### 5. Verification Decision Logic
 Upon receiving image $I'$ and signature payload $\sigma_{\text{hybrid}}$, the verifier:
 1. Parses $\sigma_{\text{ECDSA}}$, $\sigma_{\text{ML-DSA}}$, and $h_{\text{bind}}$ from $\sigma_{\text{hybrid}}$.
 2. Recomputes $m = \text{SHA256}(\mathcal{H}_{\text{signed}})$.
 3. Validates the mutual binding:
-   $$
+
+
    \text{SHA256}(\sigma_{\text{ECDSA}} \parallel \sigma_{\text{ML-DSA}} \parallel m) \stackrel{?}{=} h_{\text{bind}}
-   $$
+
+
 4. Verifies the component signatures:
-   $$
+
+
    \text{Verify}_{\text{ECDSA}}(m, \sigma_{\text{ECDSA}}, pk_{\text{ECDSA}}) \land \text{Verify}_{\text{ML-DSA}}(m, \sigma_{\text{ML-DSA}}, pk_{\text{ML-DSA}}) \stackrel{?}{=} \text{True}
-   $$
+
+
 5. Recomputes the robust hash:
-   $$
+
+
    \mathcal{H}' = \text{SHA3-256}(\text{BCH\_Decode}(b', \text{ecc}_{\text{signed}}))
-   $$
-   $$
+
+
+
+
    \mathcal{H}' \stackrel{?}{=} \mathcal{H}_{\text{signed}}
-   $$
+
+
 
 Authentication succeeds if and only if all conditions are satisfied.
 

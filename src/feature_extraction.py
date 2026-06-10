@@ -353,13 +353,32 @@ def extract_features(
     Returns:
         L2-normalized feature vector.
     """
+    # Load config to check for use_fixed_point
+    use_fixed_point = False
+    try:
+        from src.utils import load_config
+        config = load_config()
+        use_fixed_point = config.get("feature_extraction", {}).get("use_fixed_point", False)
+    except Exception:
+        pass
+
     if extractor == "resnet":
-        return extract_resnet_features(image_tensor)
+        features = extract_resnet_features(image_tensor)
     elif extractor == "vit":
         logger.warning("ViT feature extraction is deprecated. Defaulting to ResNet-18.")
-        return extract_resnet_features(image_tensor)
+        features = extract_resnet_features(image_tensor)
     else:
         raise ValueError(f"Unknown extractor: {extractor}. Use 'resnet'.")
+
+    if use_fixed_point:
+        try:
+            from src.quantization import FixedPointQuantizer
+            quantizer = FixedPointQuantizer()
+            features = quantizer.quantize(features)
+        except Exception as e:
+            logger.warning("Fixed-point quantization failed: %s", e)
+
+    return features
 
 
 # ─── Normalization ──────────────────────────────────────────────────────────

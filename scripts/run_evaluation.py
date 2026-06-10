@@ -254,6 +254,40 @@ def find_test_images(image_dir: str, max_images: int = 10) -> List[Path]:
     return sorted(images)[:max_images]
 
 
+def load_pil_image(img_path: Path) -> Image.Image:
+    """Load DICOM or standard image as a PIL Image."""
+    if img_path.suffix.lower() == ".dcm":
+        import pydicom
+        try:
+            ds = pydicom.dcmread(str(img_path))
+            pixel_array = ds.pixel_array.astype(np.float32)
+        except Exception as e:
+            raise RuntimeError(f"Failed to read DICOM {img_path.name}: {e}") from e
+
+        if hasattr(ds, "WindowCenter") and hasattr(ds, "WindowWidth"):
+            center_val = ds.WindowCenter
+            width_val = ds.WindowWidth
+            center = float(center_val[0]) if hasattr(center_val, "__getitem__") and not isinstance(center_val, (str, bytes)) else float(center_val)
+            width = float(width_val[0]) if hasattr(width_val, "__getitem__") and not isinstance(width_val, (str, bytes)) else float(width_val)
+            lower = center - width / 2
+            upper = center + width / 2
+            pixel_array = np.clip(pixel_array, lower, upper)
+
+        pmin, pmax = pixel_array.min(), pixel_array.max()
+        if pmax - pmin > 0:
+            pixel_array = ((pixel_array - pmin) / (pmax - pmin) * 255).astype(np.uint8)
+        else:
+            pixel_array = np.zeros_like(pixel_array, dtype=np.uint8)
+        return Image.fromarray(pixel_array).convert("RGB")
+    else:
+        return Image.open(img_path).convert("RGB")
+
+
+def find_images(image_dir: str | Path, max_n: int = 10) -> List[Path]:
+    """Expose find_test_images under the name find_images for legacy scratch scripts."""
+    return find_test_images(image_dir, max_images=max_n)
+
+
 def evaluate_determinism(image_paths: List[Path], runs: int = 3) -> Dict:
     """Verify that the same image produces identical hashes across runs."""
     from src.robust_hash import compute_robust_hash
@@ -312,7 +346,7 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
     Run comprehensive robustness and security attack suite on ViT vs ResNet.
     Saves output/robustness_metrics.csv.
     """
-    from src.feature_extraction import extract_features, load_and_preprocess_image, compute_ncc
+    from src.feature_extraction import extract_features, load_and_preprocess_image, load_and_preprocess_dicom, compute_ncc
     from src.robust_hash import quantize_to_binary, compute_bit_error_rate
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -347,10 +381,13 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
     for i, img_path in enumerate(image_paths):
         try:
             # Load original image and extract original features
-            img = Image.open(img_path).convert("RGB")
+            img = load_pil_image(img_path)
             
             # Original features and bits (ViT)
-            tensor_orig = load_and_preprocess_image(img_path)
+            if img_path.suffix.lower() == ".dcm":
+                tensor_orig = load_and_preprocess_dicom(img_path)
+            else:
+                tensor_orig = load_and_preprocess_image(img_path)
             feat_orig_vit = extract_features(tensor_orig, extractor="vit")
             bits_orig_vit = quantize_to_binary(feat_orig_vit)
 
@@ -395,7 +432,10 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
 
                 # Extract features/bits from attacked state
                 if att == "Replay":
-                    tensor_att = load_and_preprocess_image(replay_path)
+                    if replay_path.suffix.lower() == ".dcm":
+                        tensor_att = load_and_preprocess_dicom(replay_path)
+                    else:
+                        tensor_att = load_and_preprocess_image(replay_path)
                     feat_att_vit = extract_features(tensor_att, extractor="vit")
                     bits_att_vit = quantize_to_binary(feat_att_vit)
                     
@@ -526,7 +566,7 @@ def evaluate_robustness_and_attacks(image_paths: List[Path], output_dir: Path) -
 
 def benchmark_performance(image_paths: List[Path], runs: int = 5) -> Dict:
     """Benchmark timing for all pipeline stages."""
-    from src.feature_extraction import extract_features, load_and_preprocess_image
+    from src.feature_extraction import extract_features, load_and_preprocess_image, load_and_preprocess_dicom
     from src.robust_hash import apply_bch_encoding, compute_final_hash, quantize_to_binary
     from src.hybrid_signatures import generate_keypair_ecdsa, generate_keypair_mldsa
 
@@ -539,7 +579,10 @@ def benchmark_performance(image_paths: List[Path], runs: int = 5) -> Dict:
     times = []
     for _ in range(runs):
         with Timer() as t:
-            tensor = load_and_preprocess_image(img_path)
+            if img_path.suffix.lower() == ".dcm":
+                tensor = load_and_preprocess_dicom(img_path)
+            else:
+                tensor = load_and_preprocess_image(img_path)
             features = extract_features(tensor, extractor="vit")
         times.append(t.elapsed)
     results["feature_extraction_ms"] = round(np.mean(times) * 1000, 2)

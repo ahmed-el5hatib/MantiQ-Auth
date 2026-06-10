@@ -1,0 +1,28 @@
+{
+  "bootstrap": {
+    "fpr": {
+      "mean": 0.23443333333333333,
+      "ci_lower": 0.1,
+      "ci_upper": 0.4
+    },
+    "fnr": {
+      "mean": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    }
+  },
+  "mcnemar": {
+    "contingency_table": [
+      [
+        10,
+        23
+      ],
+      [
+        0,
+        7
+      ]
+    ],
+    "statistic": 21.043478260869566,
+    "p_value": 4.489784498638631e-06
+  }
+}

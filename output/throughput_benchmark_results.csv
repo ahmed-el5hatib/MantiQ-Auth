@@ -1,0 +1,5 @@
+concurrency,mean_latency_ms,std_latency_ms,throughput_images_min,batch_time_s,saturation_ratio
+1,1022.65,0.0,58.61,1.024,1.0
+5,1120.63,11.52,263.44,1.139,1.1
+10,1914.31,52.21,304.88,1.968,1.87
+20,2142.56,180.04,241.48,2.236,2.1

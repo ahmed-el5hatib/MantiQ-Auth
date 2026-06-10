@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "concurrency": 1,
+      "mean_latency_ms": 1022.65,
+      "std_latency_ms": 0.0,
+      "throughput_images_min": 58.61,
+      "batch_time_s": 1.024,
+      "saturation_ratio": 1.0
+    },
+    {
+      "concurrency": 5,
+      "mean_latency_ms": 1120.63,
+      "std_latency_ms": 11.52,
+      "throughput_images_min": 263.44,
+      "batch_time_s": 1.139,
+      "saturation_ratio": 1.1
+    },
+    {
+      "concurrency": 10,
+      "mean_latency_ms": 1914.31,
+      "std_latency_ms": 52.21,
+      "throughput_images_min": 304.88,
+      "batch_time_s": 1.968,
+      "saturation_ratio": 1.87
+    },
+    {
+      "concurrency": 20,
+      "mean_latency_ms": 2142.56,
+      "std_latency_ms": 180.04,
+      "throughput_images_min": 241.48,
+      "batch_time_s": 2.236,
+      "saturation_ratio": 2.1
+    }
+  ],
+  "saturation_point": "Concurrency 10 (Latency increased 1.87x)"
+}

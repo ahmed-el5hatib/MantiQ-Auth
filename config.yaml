@@ -26,6 +26,7 @@ feature_extraction:
   vit_feature_dim: 384          # ViT-B/16 output dimension sliced to 384-dim (ViT-S equivalent)
   resnet_model: "resnet18"
   resnet_feature_dim: 512
+  use_fixed_point: false
   image_size: 224
   # ImageNet normalization stats
   normalize_mean: [0.485, 0.456, 0.406]

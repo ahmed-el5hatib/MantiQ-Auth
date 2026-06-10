@@ -77,21 +77,48 @@ class CryptoGateway:
         mldsa_level: int = 65,
         ecdsa_curve: str = "SECP256R1",
         combiner: Literal["concatenation", "silithium"] = "concatenation",
+        hsm_password: Optional[str] = None,
+        key_store_path: Optional[str | Path] = None,
+        revocation_list_path: Optional[str | Path] = None,
     ):
         self.feature_extractor = feature_extractor
         self.mldsa_level = mldsa_level
         self.ecdsa_curve = ecdsa_curve
         self.combiner = combiner
+        self.hsm_password = hsm_password
 
         self._ecdsa_kp: Optional[ECDSAKeyPair] = None
         self._mldsa_kp: Optional[MLDSAKeyPair] = None
+        self.active_key_id: Optional[str] = None
+
+        if key_store_path and revocation_list_path and hsm_password:
+            from src.key_management import SoftwareHSM
+            self.hsm = SoftwareHSM(key_store_path, revocation_list_path)
+            # Try to load existing active keys, or generate them if store doesn't exist
+            if Path(key_store_path).exists():
+                try:
+                    self.active_key_id, self._ecdsa_kp, self._mldsa_kp = self.hsm.load_active_keys(hsm_password)
+                except Exception as e:
+                    logger.warning("Could not load active keys from HSM: %s. Generating fresh keys in HSM...", e)
+                    self.active_key_id = self.hsm.generate_and_store_initial_keys(hsm_password, mldsa_level, ecdsa_curve)
+                    _, self._ecdsa_kp, self._mldsa_kp = self.hsm.load_active_keys(hsm_password)
+            else:
+                self.active_key_id = self.hsm.generate_and_store_initial_keys(hsm_password, mldsa_level, ecdsa_curve)
+                _, self._ecdsa_kp, self._mldsa_kp = self.hsm.load_active_keys(hsm_password)
+        else:
+            self.hsm = None
 
     def generate_keys(self) -> None:
         """Generate both ECDSA and ML-DSA key pairs."""
-        logger.info("Generating key pairs...")
-        self._ecdsa_kp = generate_keypair_ecdsa(self.ecdsa_curve)
-        self._mldsa_kp = generate_keypair_mldsa(self.mldsa_level)
-        logger.info("Key pairs generated successfully.")
+        if self.hsm and self.hsm_password:
+            logger.info("HSM is enabled. Rotating key pair in HSM...")
+            self.active_key_id = self.hsm.rotate_keys(self.hsm_password, self.mldsa_level, self.ecdsa_curve)
+            _, self._ecdsa_kp, self._mldsa_kp = self.hsm.load_active_keys(self.hsm_password)
+        else:
+            logger.info("Generating key pairs...")
+            self._ecdsa_kp = generate_keypair_ecdsa(self.ecdsa_curve)
+            self._mldsa_kp = generate_keypair_mldsa(self.mldsa_level)
+            logger.info("Key pairs generated successfully.")
 
     @property
     def ecdsa_keypair(self) -> ECDSAKeyPair:

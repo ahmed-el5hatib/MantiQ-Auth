@@ -3,64 +3,64 @@ image_file,attack_type,attack_parameter,NCC,BER,Hash_Match
 1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=70,0.967639,0.089844,False
 1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=50,0.935822,0.132812,False
 1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=30,0.875313,0.171875,False
-1.3.6.1.4.1.14519.5_00000056.png,Gaussian,Noise σ=0.03,0.905763,0.140625,False
+1.3.6.1.4.1.14519.5_00000056.png,Gaussian,Noise σ=0.03,0.914267,0.125,False
 1.3.6.1.4.1.14519.5_00000056.png,Rotation,10°,0.945895,0.125,False
 1.3.6.1.4.1.14519.5_00000056.png,Tampering,,0.907691,0.140625,False
 1.3.6.1.4.1.14519.5_00000056.png,Replay,,0.78604,0.253906,False
 1.3.6.1.4.1.14519.5_00000056.png,Downgrade,(Resize),0.388087,0.34375,False
 1.3.6.1.4.1.14519.5_00000056.png,Brightness,(1.5x),0.874703,0.167969,False
 1.3.6.1.4.1.14519.5_00000056.png,Contrast,(2.0x),0.933792,0.121094,False
-1.3.6.1.4.1.14519.5_00000056.png,Salt,& Pepper Noise,0.729694,0.246094,False
+1.3.6.1.4.1.14519.5_00000056.png,Salt,& Pepper Noise,0.735846,0.261719,False
 1.3.6.1.4.1.14519.5_00000056.png,Cropping,& Padding,0.437661,0.367188,False
 1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=90,0.982616,0.074219,False
 1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=70,0.943146,0.117188,False
 1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=50,0.909685,0.167969,False
 1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=30,0.848489,0.199219,False
-1.3.6.1.4.1.14519.5_00000075.png,Gaussian,Noise σ=0.03,0.894388,0.195312,False
+1.3.6.1.4.1.14519.5_00000075.png,Gaussian,Noise σ=0.03,0.893849,0.183594,False
 1.3.6.1.4.1.14519.5_00000075.png,Rotation,10°,0.959973,0.121094,False
 1.3.6.1.4.1.14519.5_00000075.png,Tampering,,0.809978,0.214844,False
 1.3.6.1.4.1.14519.5_00000075.png,Replay,,0.845425,0.214844,False
 1.3.6.1.4.1.14519.5_00000075.png,Downgrade,(Resize),0.449554,0.347656,False
 1.3.6.1.4.1.14519.5_00000075.png,Brightness,(1.5x),0.651136,0.3125,False
 1.3.6.1.4.1.14519.5_00000075.png,Contrast,(2.0x),0.776288,0.257812,False
-1.3.6.1.4.1.14519.5_00000075.png,Salt,& Pepper Noise,0.624849,0.335938,False
+1.3.6.1.4.1.14519.5_00000075.png,Salt,& Pepper Noise,0.632153,0.3125,False
 1.3.6.1.4.1.14519.5_00000075.png,Cropping,& Padding,0.469447,0.363281,False
 1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=90,0.985489,0.0625,False
 1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=70,0.946032,0.125,False
 1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=50,0.898422,0.167969,False
 1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=30,0.834855,0.203125,False
-1.3.6.1.4.1.14519.5_00000129.png,Gaussian,Noise σ=0.03,0.852262,0.210938,False
+1.3.6.1.4.1.14519.5_00000129.png,Gaussian,Noise σ=0.03,0.845487,0.222656,False
 1.3.6.1.4.1.14519.5_00000129.png,Rotation,10°,0.966437,0.09375,False
 1.3.6.1.4.1.14519.5_00000129.png,Tampering,,0.905164,0.132812,False
 1.3.6.1.4.1.14519.5_00000129.png,Replay,,0.433815,0.394531,False
 1.3.6.1.4.1.14519.5_00000129.png,Downgrade,(Resize),0.496858,0.359375,False
 1.3.6.1.4.1.14519.5_00000129.png,Brightness,(1.5x),0.668734,0.292969,False
 1.3.6.1.4.1.14519.5_00000129.png,Contrast,(2.0x),0.83265,0.226562,False
-1.3.6.1.4.1.14519.5_00000129.png,Salt,& Pepper Noise,0.618752,0.332031,False
+1.3.6.1.4.1.14519.5_00000129.png,Salt,& Pepper Noise,0.576612,0.339844,False
 1.3.6.1.4.1.14519.5_00000129.png,Cropping,& Padding,0.444356,0.355469,False
 mri_slice_mri_0036.png,JPEG,Q=90,0.988153,0.035156,False
 mri_slice_mri_0036.png,JPEG,Q=70,0.941525,0.085938,False
 mri_slice_mri_0036.png,JPEG,Q=50,0.926669,0.109375,False
 mri_slice_mri_0036.png,JPEG,Q=30,0.893177,0.109375,False
-mri_slice_mri_0036.png,Gaussian,Noise σ=0.03,0.955879,0.101562,False
+mri_slice_mri_0036.png,Gaussian,Noise σ=0.03,0.96388,0.09375,False
 mri_slice_mri_0036.png,Rotation,10°,0.95087,0.113281,False
 mri_slice_mri_0036.png,Tampering,,0.897934,0.164062,False
 mri_slice_mri_0036.png,Replay,,0.26661,0.421875,False
 mri_slice_mri_0036.png,Downgrade,(Resize),0.571924,0.285156,False
 mri_slice_mri_0036.png,Brightness,(1.5x),0.983241,0.070312,False
 mri_slice_mri_0036.png,Contrast,(2.0x),0.943672,0.097656,False
-mri_slice_mri_0036.png,Salt,& Pepper Noise,0.781358,0.214844,False
+mri_slice_mri_0036.png,Salt,& Pepper Noise,0.735225,0.226562,False
 mri_slice_mri_0036.png,Cropping,& Padding,0.701483,0.253906,False
 xray_slice_xray_0058.png,JPEG,Q=90,0.993056,0.039062,False
 xray_slice_xray_0058.png,JPEG,Q=70,0.933492,0.101562,False
 xray_slice_xray_0058.png,JPEG,Q=50,0.898087,0.125,False
 xray_slice_xray_0058.png,JPEG,Q=30,0.874142,0.164062,False
-xray_slice_xray_0058.png,Gaussian,Noise σ=0.03,0.941004,0.085938,False
+xray_slice_xray_0058.png,Gaussian,Noise σ=0.03,0.939174,0.097656,False
 xray_slice_xray_0058.png,Rotation,10°,0.832508,0.1875,False
 xray_slice_xray_0058.png,Tampering,,0.95949,0.097656,False
 xray_slice_xray_0058.png,Replay,,0.363968,0.375,False
 xray_slice_xray_0058.png,Downgrade,(Resize),0.333731,0.386719,False
 xray_slice_xray_0058.png,Brightness,(1.5x),0.958071,0.089844,False
 xray_slice_xray_0058.png,Contrast,(2.0x),0.883742,0.195312,False
-xray_slice_xray_0058.png,Salt,& Pepper Noise,0.764101,0.25,False
+xray_slice_xray_0058.png,Salt,& Pepper Noise,0.803818,0.222656,False
 xray_slice_xray_0058.png,Cropping,& Padding,0.608221,0.320312,False

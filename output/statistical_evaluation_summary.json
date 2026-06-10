@@ -2,9 +2,9 @@
   "num_images": 1000,
   "bootstrap": {
     "fpr": {
-      "mean": 0.665563,
-      "ci_lower": 0.65,
-      "ci_upper": 0.6826666666666666
+      "mean": 0.3021016666666667,
+      "ci_lower": 0.2866666666666667,
+      "ci_upper": 0.319
     },
     "fnr": {
       "mean": 0.0,
@@ -12,33 +12,33 @@
       "ci_upper": 0.0
     },
     "jpeg_70": {
-      "mean": 0.792015,
-      "ci_lower": 0.769,
-      "ci_upper": 0.816
+      "mean": 0.54147,
+      "ci_lower": 0.512,
+      "ci_upper": 0.571
     },
     "jpeg_80": {
-      "mean": 0.660924,
-      "ci_lower": 0.632,
-      "ci_upper": 0.691
+      "mean": 0.283674,
+      "ci_lower": 0.254,
+      "ci_upper": 0.31
     },
     "jpeg_90": {
-      "mean": 0.541781,
-      "ci_lower": 0.513,
-      "ci_upper": 0.57
+      "mean": 0.082107,
+      "ci_lower": 0.066,
+      "ci_upper": 0.101
     }
   },
   "mcnemar": {
     "contingency_table": [
       [
-        1011,
-        994
+        1016,
+        2078
       ],
       [
         0,
-        1995
+        906
       ]
     ],
-    "statistic": 992.0010060362173,
-    "p_value": 9.839336753315118e-218
+    "statistic": 2076.000481231954,
+    "p_value": 0.0
   }
 }

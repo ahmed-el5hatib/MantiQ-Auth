@@ -124,33 +124,25 @@ def run_mcnemar(table: np.ndarray) -> Tuple[float, float]:
     return stat, p_val
 
 def main():
-    logger.info("Initializing Massive Evaluation (1,000 Images)...")
+    logger.info("Initializing Massive Evaluation (1,000 DICOM Images)...")
     
-    # Collect 500 DICOM files
+    # Collect all DICOM files
     dicom_files = []
     for ext in ["*.dcm"]:
         for p in Path("data").rglob(ext):
             if p.stat().st_size > 5000:
                 dicom_files.append(p)
-    dicom_files = sorted(dicom_files)[:500]
     
-    # Collect 500 PNG files
-    png_files = []
-    for ext in ["*.png"]:
-        for p in Path("data/processed").rglob(ext):
-            if p.stat().st_size > 5000:
-                png_files.append(p)
-    png_files = sorted(png_files)[:500]
+    dicom_files = sorted(dicom_files)
+    logger.info("Total DICOM files found in data/: %d", len(dicom_files))
     
-    logger.info("Selected %d DICOM files and %d PNG files.", len(dicom_files), len(png_files))
-    all_files = dicom_files + png_files
-    
-    if len(all_files) < 1000:
-        logger.warning("Only found %d files in total. Using all available.", len(all_files))
+    if len(dicom_files) < 1000:
+        logger.warning("Only found %d DICOM files. Using all available.", len(dicom_files))
+        all_files = dicom_files
     else:
-        all_files = all_files[:1000]
+        all_files = dicom_files[:1000]
     
-    logger.info("Running evaluation on %d images...", len(all_files))
+    logger.info("Running evaluation on %d DICOM images...", len(all_files))
     
     extractor = BatchFeatureExtractor("cpu")
     

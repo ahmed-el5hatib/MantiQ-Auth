@@ -98,9 +98,13 @@ def main():
         original_uid = row["original_uid"]
         
         if not filepath.exists():
-            filepath = Path("..") / filepath
+            # Try to map data/dicom_processed to data/processed/ct
+            mapped_str = str(filepath).replace("dicom_processed", "processed/ct")
+            filepath = Path(mapped_str)
             if not filepath.exists():
-                continue
+                filepath = Path("..") / filepath
+                if not filepath.exists():
+                    continue
                 
         # 1. Load and process original once
         tensor_orig = load_and_preprocess_image(filepath)

@@ -114,6 +114,26 @@ def parse_combined_signature(
             raise ValueError("Invalid signature structure.")
         ecdsa_sig = combined[4:4 + ecdsa_len]
         mldsa_sig = combined[4 + ecdsa_len:]
+        # Strip trailing null padding byte introduced by DICOM even-length requirement
+        if len(mldsa_sig) > 0 and len(mldsa_sig) - 1 in {2420, 3309, 4627} and mldsa_sig[-1] == 0:
+            mldsa_sig = mldsa_sig[:-1]
+        return HybridSignature(
+            ecdsa_sig=ecdsa_sig,
+            mldsa_sig=mldsa_sig,
+            combiner=combiner,
+            combined=combined,
+        )
+    elif combiner == "silithium":
+        if len(combined) < 8 + 32:
+            raise ValueError("Invalid silithium signature payload size.")
+        ecdsa_len = int.from_bytes(combined[:4], "big")
+        if len(combined) < 8 + ecdsa_len + 32:
+            raise ValueError("Invalid silithium signature structure (ECDSA part).")
+        ecdsa_sig = combined[4:4 + ecdsa_len]
+        mldsa_len = int.from_bytes(combined[4 + ecdsa_len:8 + ecdsa_len], "big")
+        if len(combined) < 8 + ecdsa_len + mldsa_len + 32:
+            raise ValueError("Invalid silithium signature structure (ML-DSA part).")
+        mldsa_sig = combined[8 + ecdsa_len:8 + ecdsa_len + mldsa_len]
         return HybridSignature(
             ecdsa_sig=ecdsa_sig,
             mldsa_sig=mldsa_sig,

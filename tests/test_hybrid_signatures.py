@@ -117,3 +117,45 @@ def test_hybrid_flow_concatenation(mock_message_hash):
         mldsa_algorithm="ML-DSA-65"
     )
     assert overall_tampered is False
+
+
+def test_hybrid_flow_silithium(mock_message_hash):
+    """Test overall hybrid silithium (mutually binding) flow."""
+    try:
+        # noinspection PyPackageRequirements
+        import oqs
+    except ImportError:
+        pytest.skip("liboqs-python not available, cannot run hybrid signature test.")
+
+    ecdsa_kp = generate_keypair_ecdsa()
+    mldsa_kp = generate_keypair_mldsa(level=65)
+
+    # Sign
+    hybrid_sig = sign_hybrid(mock_message_hash, ecdsa_kp, mldsa_kp, combiner="silithium")
+    # Expected size: 4 + ecdsa_size + 4 + mldsa_size + 32
+    assert hybrid_sig.total_size == 8 + hybrid_sig.ecdsa_size + hybrid_sig.mldsa_size + 32
+
+    # Verify
+    overall, ecdsa_ok, mldsa_ok = verify_hybrid(
+        mock_message_hash,
+        hybrid_sig,
+        ecdsa_kp.public_key,
+        mldsa_kp.public_key,
+        mldsa_algorithm="ML-DSA-65"
+    )
+
+    assert overall is True
+    assert ecdsa_ok is True
+    assert mldsa_ok is True
+
+    # Verify with wrong hash (tampered hash)
+    tampered_hash = hashlib.sha256(b"tampered").digest()
+    overall_tampered, _, _ = verify_hybrid(
+        tampered_hash,
+        hybrid_sig,
+        ecdsa_kp.public_key,
+        mldsa_kp.public_key,
+        mldsa_algorithm="ML-DSA-65"
+    )
+    assert overall_tampered is False
+

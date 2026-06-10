@@ -1,66 +1,261 @@
 image_file,attack_type,attack_parameter,NCC,BER,Hash_Match
-1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=90,0.991663,0.046875,False
-1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=70,0.967639,0.089844,False
-1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=50,0.935822,0.132812,False
-1.3.6.1.4.1.14519.5_00000056.png,JPEG,Q=30,0.875313,0.171875,False
-1.3.6.1.4.1.14519.5_00000056.png,Gaussian,Noise σ=0.03,0.919907,0.144531,False
-1.3.6.1.4.1.14519.5_00000056.png,Rotation,10°,0.945895,0.125,False
-1.3.6.1.4.1.14519.5_00000056.png,Tampering,,0.907691,0.140625,False
-1.3.6.1.4.1.14519.5_00000056.png,Replay,,0.78604,0.253906,False
-1.3.6.1.4.1.14519.5_00000056.png,Downgrade,(Resize),0.388087,0.34375,False
-1.3.6.1.4.1.14519.5_00000056.png,Brightness,(1.5x),0.874703,0.167969,False
-1.3.6.1.4.1.14519.5_00000056.png,Contrast,(2.0x),0.933792,0.121094,False
-1.3.6.1.4.1.14519.5_00000056.png,Salt,& Pepper Noise,0.742634,0.257812,False
-1.3.6.1.4.1.14519.5_00000056.png,Cropping,& Padding,0.437661,0.367188,False
-1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=90,0.982616,0.074219,False
-1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=70,0.943146,0.117188,False
-1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=50,0.909685,0.167969,False
-1.3.6.1.4.1.14519.5_00000075.png,JPEG,Q=30,0.848489,0.199219,False
-1.3.6.1.4.1.14519.5_00000075.png,Gaussian,Noise σ=0.03,0.886858,0.207031,False
-1.3.6.1.4.1.14519.5_00000075.png,Rotation,10°,0.959973,0.121094,False
-1.3.6.1.4.1.14519.5_00000075.png,Tampering,,0.809978,0.214844,False
-1.3.6.1.4.1.14519.5_00000075.png,Replay,,0.845425,0.214844,False
-1.3.6.1.4.1.14519.5_00000075.png,Downgrade,(Resize),0.449554,0.347656,False
-1.3.6.1.4.1.14519.5_00000075.png,Brightness,(1.5x),0.651136,0.3125,False
-1.3.6.1.4.1.14519.5_00000075.png,Contrast,(2.0x),0.776288,0.257812,False
-1.3.6.1.4.1.14519.5_00000075.png,Salt,& Pepper Noise,0.634826,0.3125,False
-1.3.6.1.4.1.14519.5_00000075.png,Cropping,& Padding,0.469447,0.363281,False
-1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=90,0.985489,0.0625,False
-1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=70,0.946032,0.125,False
-1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=50,0.898422,0.167969,False
-1.3.6.1.4.1.14519.5_00000129.png,JPEG,Q=30,0.834855,0.203125,False
-1.3.6.1.4.1.14519.5_00000129.png,Gaussian,Noise σ=0.03,0.83837,0.238281,False
-1.3.6.1.4.1.14519.5_00000129.png,Rotation,10°,0.966437,0.09375,False
-1.3.6.1.4.1.14519.5_00000129.png,Tampering,,0.905164,0.132812,False
-1.3.6.1.4.1.14519.5_00000129.png,Replay,,0.433815,0.394531,False
-1.3.6.1.4.1.14519.5_00000129.png,Downgrade,(Resize),0.496858,0.359375,False
-1.3.6.1.4.1.14519.5_00000129.png,Brightness,(1.5x),0.668734,0.292969,False
-1.3.6.1.4.1.14519.5_00000129.png,Contrast,(2.0x),0.83265,0.226562,False
-1.3.6.1.4.1.14519.5_00000129.png,Salt,& Pepper Noise,0.623241,0.316406,False
-1.3.6.1.4.1.14519.5_00000129.png,Cropping,& Padding,0.444356,0.355469,False
-mri_slice_mri_0036.png,JPEG,Q=90,0.988153,0.035156,False
-mri_slice_mri_0036.png,JPEG,Q=70,0.941525,0.085938,False
-mri_slice_mri_0036.png,JPEG,Q=50,0.926669,0.109375,False
-mri_slice_mri_0036.png,JPEG,Q=30,0.893177,0.109375,False
-mri_slice_mri_0036.png,Gaussian,Noise σ=0.03,0.966446,0.085938,False
-mri_slice_mri_0036.png,Rotation,10°,0.95087,0.113281,False
-mri_slice_mri_0036.png,Tampering,,0.897934,0.164062,False
-mri_slice_mri_0036.png,Replay,,0.26661,0.421875,False
-mri_slice_mri_0036.png,Downgrade,(Resize),0.571924,0.285156,False
-mri_slice_mri_0036.png,Brightness,(1.5x),0.983241,0.070312,False
-mri_slice_mri_0036.png,Contrast,(2.0x),0.943672,0.097656,False
-mri_slice_mri_0036.png,Salt,& Pepper Noise,0.753982,0.242188,False
-mri_slice_mri_0036.png,Cropping,& Padding,0.701483,0.253906,False
-xray_slice_xray_0058.png,JPEG,Q=90,0.993056,0.039062,False
-xray_slice_xray_0058.png,JPEG,Q=70,0.933492,0.101562,False
-xray_slice_xray_0058.png,JPEG,Q=50,0.898087,0.125,False
-xray_slice_xray_0058.png,JPEG,Q=30,0.874142,0.164062,False
-xray_slice_xray_0058.png,Gaussian,Noise σ=0.03,0.945444,0.109375,False
-xray_slice_xray_0058.png,Rotation,10°,0.832508,0.1875,False
-xray_slice_xray_0058.png,Tampering,,0.95949,0.097656,False
-xray_slice_xray_0058.png,Replay,,0.363968,0.375,False
-xray_slice_xray_0058.png,Downgrade,(Resize),0.333731,0.386719,False
-xray_slice_xray_0058.png,Brightness,(1.5x),0.958071,0.089844,False
-xray_slice_xray_0058.png,Contrast,(2.0x),0.883742,0.195312,False
-xray_slice_xray_0058.png,Salt,& Pepper Noise,0.717803,0.269531,False
-xray_slice_xray_0058.png,Cropping,& Padding,0.608221,0.320312,False
+00000001.png,JPEG,Q=90,0.984574,0.074219,False
+00000001.png,JPEG,Q=70,0.942655,0.117188,False
+00000001.png,JPEG,Q=50,0.908101,0.152344,False
+00000001.png,JPEG,Q=30,0.840628,0.1875,False
+00000001.png,Gaussian,Noise σ=0.03,0.865873,0.191406,False
+00000001.png,Rotation,10°,0.960773,0.101562,False
+00000001.png,Tampering,,0.877757,0.171875,False
+00000001.png,Replay,,0.912505,0.175781,False
+00000001.png,Downgrade,(Resize),0.475844,0.363281,False
+00000001.png,Brightness,(1.5x),0.674919,0.320312,False
+00000001.png,Contrast,(2.0x),0.835607,0.238281,False
+00000001.png,Salt,& Pepper Noise,0.619401,0.3125,False
+00000001.png,Cropping,& Padding,0.432736,0.335938,False
+00000002.png,JPEG,Q=90,0.986355,0.074219,False
+00000002.png,JPEG,Q=70,0.940529,0.148438,False
+00000002.png,JPEG,Q=50,0.900162,0.167969,False
+00000002.png,JPEG,Q=30,0.842789,0.234375,False
+00000002.png,Gaussian,Noise σ=0.03,0.872203,0.199219,False
+00000002.png,Rotation,10°,0.95258,0.125,False
+00000002.png,Tampering,,0.804112,0.226562,False
+00000002.png,Replay,,0.941373,0.121094,False
+00000002.png,Downgrade,(Resize),0.471926,0.335938,False
+00000002.png,Brightness,(1.5x),0.658837,0.304688,False
+00000002.png,Contrast,(2.0x),0.77778,0.253906,False
+00000002.png,Salt,& Pepper Noise,0.601691,0.339844,False
+00000002.png,Cropping,& Padding,0.454679,0.367188,False
+00000003.png,JPEG,Q=90,0.985526,0.0625,False
+00000003.png,JPEG,Q=70,0.924308,0.136719,False
+00000003.png,JPEG,Q=50,0.886209,0.152344,False
+00000003.png,JPEG,Q=30,0.818845,0.214844,False
+00000003.png,Gaussian,Noise σ=0.03,0.890855,0.171875,False
+00000003.png,Rotation,10°,0.961257,0.101562,False
+00000003.png,Tampering,,0.809248,0.234375,False
+00000003.png,Replay,,0.943372,0.125,False
+00000003.png,Downgrade,(Resize),0.453656,0.347656,False
+00000003.png,Brightness,(1.5x),0.64739,0.328125,False
+00000003.png,Contrast,(2.0x),0.765001,0.273438,False
+00000003.png,Salt,& Pepper Noise,0.610489,0.332031,False
+00000003.png,Cropping,& Padding,0.495925,0.367188,False
+00000004.png,JPEG,Q=90,0.986995,0.0625,False
+00000004.png,JPEG,Q=70,0.949177,0.125,False
+00000004.png,JPEG,Q=50,0.927564,0.152344,False
+00000004.png,JPEG,Q=30,0.875736,0.1875,False
+00000004.png,Gaussian,Noise σ=0.03,0.891478,0.167969,False
+00000004.png,Rotation,10°,0.957607,0.105469,False
+00000004.png,Tampering,,0.821913,0.210938,False
+00000004.png,Replay,,0.914031,0.160156,False
+00000004.png,Downgrade,(Resize),0.442448,0.359375,False
+00000004.png,Brightness,(1.5x),0.62458,0.292969,False
+00000004.png,Contrast,(2.0x),0.747937,0.25,False
+00000004.png,Salt,& Pepper Noise,0.602142,0.3125,False
+00000004.png,Cropping,& Padding,0.510074,0.332031,False
+00000005.png,JPEG,Q=90,0.987437,0.074219,False
+00000005.png,JPEG,Q=70,0.954206,0.125,False
+00000005.png,JPEG,Q=50,0.906937,0.167969,False
+00000005.png,JPEG,Q=30,0.884441,0.175781,False
+00000005.png,Gaussian,Noise σ=0.03,0.898703,0.152344,False
+00000005.png,Rotation,10°,0.957504,0.117188,False
+00000005.png,Tampering,,0.842924,0.195312,False
+00000005.png,Replay,,0.830012,0.222656,False
+00000005.png,Downgrade,(Resize),0.523228,0.316406,False
+00000005.png,Brightness,(1.5x),0.683623,0.308594,False
+00000005.png,Contrast,(2.0x),0.763292,0.257812,False
+00000005.png,Salt,& Pepper Noise,0.659106,0.3125,False
+00000005.png,Cropping,& Padding,0.54098,0.332031,False
+00000006.png,JPEG,Q=90,0.993942,0.027344,True
+00000006.png,JPEG,Q=70,0.973245,0.0625,False
+00000006.png,JPEG,Q=50,0.959844,0.078125,False
+00000006.png,JPEG,Q=30,0.938011,0.089844,False
+00000006.png,Gaussian,Noise σ=0.03,0.912623,0.128906,False
+00000006.png,Rotation,10°,0.958856,0.082031,False
+00000006.png,Tampering,,0.874211,0.183594,False
+00000006.png,Replay,,0.777639,0.230469,False
+00000006.png,Downgrade,(Resize),0.473241,0.335938,False
+00000006.png,Brightness,(1.5x),0.758244,0.242188,False
+00000006.png,Contrast,(2.0x),0.856192,0.199219,False
+00000006.png,Salt,& Pepper Noise,0.687341,0.289062,False
+00000006.png,Cropping,& Padding,0.457896,0.347656,False
+00000007.png,JPEG,Q=90,0.991102,0.046875,False
+00000007.png,JPEG,Q=70,0.947412,0.097656,False
+00000007.png,JPEG,Q=50,0.922971,0.117188,False
+00000007.png,JPEG,Q=30,0.870236,0.171875,False
+00000007.png,Gaussian,Noise σ=0.03,0.867536,0.214844,False
+00000007.png,Rotation,10°,0.97071,0.070312,False
+00000007.png,Tampering,,0.885147,0.144531,False
+00000007.png,Replay,,0.858568,0.183594,False
+00000007.png,Downgrade,(Resize),0.510454,0.359375,False
+00000007.png,Brightness,(1.5x),0.672499,0.308594,False
+00000007.png,Contrast,(2.0x),0.851521,0.21875,False
+00000007.png,Salt,& Pepper Noise,0.630061,0.308594,False
+00000007.png,Cropping,& Padding,0.404086,0.351562,False
+00000008.png,JPEG,Q=90,0.990635,0.046875,False
+00000008.png,JPEG,Q=70,0.961911,0.078125,False
+00000008.png,JPEG,Q=50,0.944313,0.101562,False
+00000008.png,JPEG,Q=30,0.91129,0.144531,False
+00000008.png,Gaussian,Noise σ=0.03,0.890061,0.171875,False
+00000008.png,Rotation,10°,0.967691,0.078125,False
+00000008.png,Tampering,,0.885696,0.175781,False
+00000008.png,Replay,,0.86958,0.195312,False
+00000008.png,Downgrade,(Resize),0.492038,0.363281,False
+00000008.png,Brightness,(1.5x),0.696062,0.296875,False
+00000008.png,Contrast,(2.0x),0.88526,0.160156,False
+00000008.png,Salt,& Pepper Noise,0.63567,0.277344,False
+00000008.png,Cropping,& Padding,0.415161,0.367188,False
+00000009.png,JPEG,Q=90,0.987199,0.0625,False
+00000009.png,JPEG,Q=70,0.935607,0.132812,False
+00000009.png,JPEG,Q=50,0.909723,0.152344,False
+00000009.png,JPEG,Q=30,0.847766,0.210938,False
+00000009.png,Gaussian,Noise σ=0.03,0.854639,0.210938,False
+00000009.png,Rotation,10°,0.968334,0.105469,False
+00000009.png,Tampering,,0.904283,0.152344,False
+00000009.png,Replay,,0.868839,0.210938,False
+00000009.png,Downgrade,(Resize),0.508089,0.34375,False
+00000009.png,Brightness,(1.5x),0.679392,0.304688,False
+00000009.png,Contrast,(2.0x),0.849736,0.214844,False
+00000009.png,Salt,& Pepper Noise,0.634344,0.328125,False
+00000009.png,Cropping,& Padding,0.431507,0.363281,False
+00000010.png,JPEG,Q=90,0.992823,0.035156,False
+00000010.png,JPEG,Q=70,0.966551,0.078125,False
+00000010.png,JPEG,Q=50,0.948347,0.101562,False
+00000010.png,JPEG,Q=30,0.918397,0.140625,False
+00000010.png,Gaussian,Noise σ=0.03,0.871457,0.199219,False
+00000010.png,Rotation,10°,0.97484,0.085938,False
+00000010.png,Tampering,,0.899816,0.164062,False
+00000010.png,Replay,,0.787782,0.207031,False
+00000010.png,Downgrade,(Resize),0.474104,0.355469,False
+00000010.png,Brightness,(1.5x),0.69915,0.292969,False
+00000010.png,Contrast,(2.0x),0.88535,0.164062,False
+00000010.png,Salt,& Pepper Noise,0.621395,0.3125,False
+00000010.png,Cropping,& Padding,0.386446,0.347656,False
+00000011.png,JPEG,Q=90,0.989211,0.050781,False
+00000011.png,JPEG,Q=70,0.950053,0.105469,False
+00000011.png,JPEG,Q=50,0.912694,0.128906,False
+00000011.png,JPEG,Q=30,0.867282,0.175781,False
+00000011.png,Gaussian,Noise σ=0.03,0.90028,0.15625,False
+00000011.png,Rotation,10°,0.961466,0.074219,False
+00000011.png,Tampering,,0.816043,0.183594,False
+00000011.png,Replay,,0.788635,0.210938,False
+00000011.png,Downgrade,(Resize),0.481786,0.316406,False
+00000011.png,Brightness,(1.5x),0.691526,0.273438,False
+00000011.png,Contrast,(2.0x),0.826912,0.199219,False
+00000011.png,Salt,& Pepper Noise,0.664677,0.300781,False
+00000011.png,Cropping,& Padding,0.467883,0.359375,False
+00000012.png,JPEG,Q=90,0.993108,0.023438,True
+00000012.png,JPEG,Q=70,0.966066,0.066406,False
+00000012.png,JPEG,Q=50,0.94604,0.09375,False
+00000012.png,JPEG,Q=30,0.906772,0.132812,False
+00000012.png,Gaussian,Noise σ=0.03,0.872624,0.164062,False
+00000012.png,Rotation,10°,0.969172,0.105469,False
+00000012.png,Tampering,,0.875918,0.164062,False
+00000012.png,Replay,,0.840081,0.179688,False
+00000012.png,Downgrade,(Resize),0.481601,0.339844,False
+00000012.png,Brightness,(1.5x),0.657707,0.320312,False
+00000012.png,Contrast,(2.0x),0.856457,0.171875,False
+00000012.png,Salt,& Pepper Noise,0.620902,0.296875,False
+00000012.png,Cropping,& Padding,0.329662,0.398438,False
+00000013.png,JPEG,Q=90,0.990155,0.050781,False
+00000013.png,JPEG,Q=70,0.940138,0.117188,False
+00000013.png,JPEG,Q=50,0.914222,0.132812,False
+00000013.png,JPEG,Q=30,0.864994,0.1875,False
+00000013.png,Gaussian,Noise σ=0.03,0.88121,0.226562,False
+00000013.png,Rotation,10°,0.966937,0.109375,False
+00000013.png,Tampering,,0.915213,0.136719,False
+00000013.png,Replay,,0.911165,0.152344,False
+00000013.png,Downgrade,(Resize),0.498714,0.351562,False
+00000013.png,Brightness,(1.5x),0.702332,0.285156,False
+00000013.png,Contrast,(2.0x),0.877585,0.207031,False
+00000013.png,Salt,& Pepper Noise,0.622864,0.328125,False
+00000013.png,Cropping,& Padding,0.435295,0.375,False
+00000014.png,JPEG,Q=90,0.988805,0.054688,False
+00000014.png,JPEG,Q=70,0.963629,0.085938,False
+00000014.png,JPEG,Q=50,0.940455,0.109375,False
+00000014.png,JPEG,Q=30,0.903685,0.128906,False
+00000014.png,Gaussian,Noise σ=0.03,0.893215,0.164062,False
+00000014.png,Rotation,10°,0.959879,0.082031,False
+00000014.png,Tampering,,0.884876,0.167969,False
+00000014.png,Replay,,0.877967,0.191406,False
+00000014.png,Downgrade,(Resize),0.518568,0.347656,False
+00000014.png,Brightness,(1.5x),0.692956,0.300781,False
+00000014.png,Contrast,(2.0x),0.882425,0.191406,False
+00000014.png,Salt,& Pepper Noise,0.645602,0.300781,False
+00000014.png,Cropping,& Padding,0.424449,0.347656,False
+00000015.png,JPEG,Q=90,0.989887,0.042969,False
+00000015.png,JPEG,Q=70,0.943821,0.097656,False
+00000015.png,JPEG,Q=50,0.886049,0.175781,False
+00000015.png,JPEG,Q=30,0.823572,0.191406,False
+00000015.png,Gaussian,Noise σ=0.03,0.862462,0.1875,False
+00000015.png,Rotation,10°,0.947819,0.125,False
+00000015.png,Tampering,,0.867542,0.171875,False
+00000015.png,Replay,,0.782475,0.226562,False
+00000015.png,Downgrade,(Resize),0.454266,0.367188,False
+00000015.png,Brightness,(1.5x),0.657826,0.300781,False
+00000015.png,Contrast,(2.0x),0.809595,0.222656,False
+00000015.png,Salt,& Pepper Noise,0.627816,0.296875,False
+00000015.png,Cropping,& Padding,0.459443,0.347656,False
+00000016.png,JPEG,Q=90,0.988559,0.050781,False
+00000016.png,JPEG,Q=70,0.956792,0.09375,False
+00000016.png,JPEG,Q=50,0.925664,0.117188,False
+00000016.png,JPEG,Q=30,0.890539,0.152344,False
+00000016.png,Gaussian,Noise σ=0.03,0.919354,0.144531,False
+00000016.png,Rotation,10°,0.956346,0.140625,False
+00000016.png,Tampering,,0.92426,0.125,False
+00000016.png,Replay,,0.786493,0.238281,False
+00000016.png,Downgrade,(Resize),0.411168,0.34375,False
+00000016.png,Brightness,(1.5x),0.816052,0.195312,False
+00000016.png,Contrast,(2.0x),0.91604,0.144531,False
+00000016.png,Salt,& Pepper Noise,0.713013,0.265625,False
+00000016.png,Cropping,& Padding,0.41469,0.367188,False
+00000017.png,JPEG,Q=90,0.985739,0.0625,False
+00000017.png,JPEG,Q=70,0.940615,0.121094,False
+00000017.png,JPEG,Q=50,0.913848,0.140625,False
+00000017.png,JPEG,Q=30,0.8758,0.179688,False
+00000017.png,Gaussian,Noise σ=0.03,0.870884,0.199219,False
+00000017.png,Rotation,10°,0.954172,0.097656,False
+00000017.png,Tampering,,0.8855,0.164062,False
+00000017.png,Replay,,0.859137,0.207031,False
+00000017.png,Downgrade,(Resize),0.484183,0.359375,False
+00000017.png,Brightness,(1.5x),0.683554,0.273438,False
+00000017.png,Contrast,(2.0x),0.850013,0.191406,False
+00000017.png,Salt,& Pepper Noise,0.62444,0.308594,False
+00000017.png,Cropping,& Padding,0.401259,0.355469,False
+00000018.png,JPEG,Q=90,0.987223,0.042969,False
+00000018.png,JPEG,Q=70,0.95507,0.09375,False
+00000018.png,JPEG,Q=50,0.927759,0.136719,False
+00000018.png,JPEG,Q=30,0.878811,0.183594,False
+00000018.png,Gaussian,Noise σ=0.03,0.906625,0.167969,False
+00000018.png,Rotation,10°,0.965059,0.121094,False
+00000018.png,Tampering,,0.848508,0.191406,False
+00000018.png,Replay,,0.852099,0.210938,False
+00000018.png,Downgrade,(Resize),0.46963,0.355469,False
+00000018.png,Brightness,(1.5x),0.662038,0.308594,False
+00000018.png,Contrast,(2.0x),0.756345,0.253906,False
+00000018.png,Salt,& Pepper Noise,0.675922,0.300781,False
+00000018.png,Cropping,& Padding,0.58844,0.320312,False
+00000019.png,JPEG,Q=90,0.983592,0.0625,False
+00000019.png,JPEG,Q=70,0.940759,0.117188,False
+00000019.png,JPEG,Q=50,0.902442,0.140625,False
+00000019.png,JPEG,Q=30,0.843377,0.203125,False
+00000019.png,Gaussian,Noise σ=0.03,0.827898,0.214844,False
+00000019.png,Rotation,10°,0.941484,0.121094,False
+00000019.png,Tampering,,0.889967,0.164062,False
+00000019.png,Replay,,0.905397,0.160156,False
+00000019.png,Downgrade,(Resize),0.423455,0.394531,False
+00000019.png,Brightness,(1.5x),0.653371,0.320312,False
+00000019.png,Contrast,(2.0x),0.79342,0.246094,False
+00000019.png,Salt,& Pepper Noise,0.588562,0.335938,False
+00000019.png,Cropping,& Padding,0.501817,0.351562,False
+00000020.png,JPEG,Q=90,0.987565,0.082031,False
+00000020.png,JPEG,Q=70,0.950374,0.117188,False
+00000020.png,JPEG,Q=50,0.91628,0.148438,False
+00000020.png,JPEG,Q=30,0.878568,0.179688,False
+00000020.png,Gaussian,Noise σ=0.03,0.888543,0.160156,False
+00000020.png,Rotation,10°,0.967516,0.105469,False
+00000020.png,Tampering,,0.843143,0.210938,False
+00000020.png,Replay,,0.923426,0.160156,False
+00000020.png,Downgrade,(Resize),0.499213,0.347656,False
+00000020.png,Brightness,(1.5x),0.607198,0.324219,False
+00000020.png,Contrast,(2.0x),0.76722,0.277344,False
+00000020.png,Salt,& Pepper Noise,0.604697,0.300781,False
+00000020.png,Cropping,& Padding,0.45544,0.363281,False

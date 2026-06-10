@@ -217,11 +217,13 @@ def sign_hybrid(
         ecdsa_len = len(ecdsa_sig).to_bytes(4, "big")
         combined = ecdsa_len + ecdsa_sig + mldsa_sig
     elif combiner == "silithium":
-        # TODO: Implement Silithium cryptographic combiner
-        # For now, fall back to concatenation with a marker
-        logger.warning("Silithium combiner not yet implemented, using concatenation.")
+        # Implement Silithium cryptographic combiner (mutually binding)
+        # Format: ecdsa_len (4B) || ecdsa_sig || mldsa_len (4B) || mldsa_sig || binding_hash (32B)
+        # where binding_hash = SHA256(ecdsa_sig || mldsa_sig || message_hash)
         ecdsa_len = len(ecdsa_sig).to_bytes(4, "big")
-        combined = ecdsa_len + ecdsa_sig + mldsa_sig
+        mldsa_len = len(mldsa_sig).to_bytes(4, "big")
+        binding_hash = hashlib.sha256(ecdsa_sig + mldsa_sig + message_hash).digest()
+        combined = ecdsa_len + ecdsa_sig + mldsa_len + mldsa_sig + binding_hash
     else:
         raise ValueError(f"Unknown combiner: {combiner}")
 
@@ -295,6 +297,36 @@ def verify_hybrid(
     Returns:
         Tuple of (overall_valid, ecdsa_valid, mldsa_valid).
     """
+    # Verify binding if using silithium
+    if signature.combiner == "silithium":
+        combined = signature.combined
+        if len(combined) < 8 + 32:
+            logger.error("Silithium signature payload too short.")
+            return False, False, False
+        ecdsa_len = int.from_bytes(combined[:4], "big")
+        if len(combined) < 8 + ecdsa_len + 32:
+            logger.error("Silithium signature payload structurally invalid (ECDSA part).")
+            return False, False, False
+        mldsa_len = int.from_bytes(combined[4+ecdsa_len:8+ecdsa_len], "big")
+        if len(combined) != 8 + ecdsa_len + mldsa_len + 32:
+            logger.error("Silithium signature payload length mismatch.")
+            return False, False, False
+            
+        ecdsa_sig_parsed = combined[4:4+ecdsa_len]
+        mldsa_sig_parsed = combined[8+ecdsa_len:8+ecdsa_len+mldsa_len]
+        binding_hash = combined[8+ecdsa_len+mldsa_len:]
+        
+        # Verify components in the parsed object match what is in the combined bytes
+        if signature.ecdsa_sig != ecdsa_sig_parsed or signature.mldsa_sig != mldsa_sig_parsed:
+            logger.error("Silithium signature components mismatch between parsed and combined.")
+            return False, False, False
+            
+        # Recompute binding hash
+        expected_binding_hash = hashlib.sha256(ecdsa_sig_parsed + mldsa_sig_parsed + message_hash).digest()
+        if binding_hash != expected_binding_hash:
+            logger.error("Silithium mutually binding hash mismatch!")
+            return False, False, False
+
     ecdsa_valid = verify_ecdsa(message_hash, signature.ecdsa_sig, ecdsa_pk)
     mldsa_valid = verify_mldsa(
         message_hash, signature.mldsa_sig, mldsa_pk, mldsa_algorithm,

@@ -112,3 +112,42 @@ def test_gateway_authenticate_and_verify(mock_image_path):
     )
     assert overall_bad is False
     assert hash_match_bad is False
+
+
+def test_gateway_authenticate_and_verify_silithium(mock_image_path):
+    """Test full authenticate-and-verify flow with silithium combiner."""
+    try:
+        # noinspection PyPackageRequirements
+        import oqs
+    except ImportError:
+        pytest.skip("liboqs-python not available, cannot run full authentication test.")
+
+    gateway = CryptoGateway(feature_extractor="resnet", combiner="silithium")
+    gateway.generate_keys()
+
+    # Authenticate
+    result = gateway.authenticate_image(mock_image_path)
+    assert isinstance(result, AuthenticationResult)
+    assert result.robust_hash is not None
+    assert len(result.robust_hash) == 64
+    assert result.signature.combiner == "silithium"
+    # Expected size: 8 + ecdsa_size + mldsa_size + 32
+    assert result.signature.total_size == 8 + result.signature.ecdsa_size + result.signature.mldsa_size + 32
+
+    # Verify summary serialization
+    summary = result.summary()
+    assert summary["image"] == str(mock_image_path)
+    assert summary["hash"] == result.robust_hash
+    assert summary["signature_size_bytes"] == result.signature.total_size
+
+    # Verify
+    overall, hash_match, ecdsa_ok, mldsa_ok = gateway.verify_image(
+        mock_image_path,
+        expected_hash=result.robust_hash,
+        signature=result.signature
+    )
+    assert overall is True
+    assert hash_match is True
+    assert ecdsa_ok is True
+    assert mldsa_ok is True
+

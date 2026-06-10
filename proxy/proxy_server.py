@@ -22,6 +22,7 @@ from pynetdicom import AE, evt, StoragePresentationContexts
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.crypto_gateway import CryptoGateway
 from src.verifier import HashBasedVerifier
+from src.utils import load_config
 from proxy.dicom_utils import embed_signature_payload, extract_signature_payload
 
 # Prevent UnicodeEncodeError on Windows PowerShell by forcing UTF-8 encoding
@@ -32,8 +33,15 @@ if sys.platform.startswith('win'):
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)-8s PROXY — %(message)s")
 logger = logging.getLogger("mantiq.proxy")
 
+# Load config to get combiner setting (agility)
+try:
+    config = load_config()
+    combiner = config.get("signatures", {}).get("combiner", "concatenation")
+except Exception:
+    combiner = "concatenation"
+
 # Initialize CryptoGateway and generate keys for simulation
-gateway = CryptoGateway(feature_extractor="resnet", mldsa_level=65)
+gateway = CryptoGateway(feature_extractor="resnet", mldsa_level=65, combiner=combiner)
 gateway.generate_keys()
 
 # Export public keys to data/pacs/keys.json for offline inspection tools

@@ -264,6 +264,10 @@ def load_pil_image(img_path: Path) -> Image.Image:
         except Exception as e:
             raise RuntimeError(f"Failed to read DICOM {img_path.name}: {e}") from e
 
+        # Handle multi-frame DICOM files (e.g. Ultrasound Cine loops)
+        if pixel_array.ndim > 2:
+            pixel_array = pixel_array[0]
+
         if hasattr(ds, "WindowCenter") and hasattr(ds, "WindowWidth"):
             center_val = ds.WindowCenter
             width_val = ds.WindowWidth

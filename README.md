@@ -289,15 +289,17 @@ You must install the Open Quantum Safe library bindings to utilize ML-DSA.
 pip install liboqs-python
 ```
 
-### 3. Run the Demonstration
-The Jupyter Notebook serves as the primary walkthrough of the finalized architecture:
+### 3. Download Clinical Datasets & Run Multi-Modality Evaluation
+To download the real clinical datasets from TCIA and run the massive evaluation suite on 4,000 DICOM images:
 ```bash
-jupyter notebook MantiQ_Auth_Final.ipynb
-```
+# 1. Download 1,000 real DICOMs per modality (CT, MRI, X-ray, Ultrasound) from TCIA
+python scripts/download_all_modalities.py
 
-Or you can run the command-line evaluation suite to test the cryptographic boundary against tampering and benign distortions:
-```bash
-python scripts/run_evaluation.py --images data/processed/ct
+# 2. Run the massive evaluation suite
+python scripts/run_massive_evaluation.py
+
+# 3. Generate comparative plots
+python scripts/plot_multimodality_results.py
 ```
 
 ### 4. Run the Crypto-Agile DICOM Proxy Simulation & Benchmark
@@ -314,29 +316,33 @@ python scripts/inspect_dicom_crypto.py
 
 ## 📊 Empirical Verification & Visualization Showcase
 
-Below is the visual showcase generated during pipeline execution.
+Below are the empirical results collected over the **4,000 raw clinical DICOM images** (N=1,000 per modality):
 
-### 1. Tampering and Robustness Showcase
-This plot illustrates the robust hashing result for a medical CT slice. Note that lossy JPEG compression (Q=70) successfully preserves the robust hash (preventing false positives) while localized nodule tampering is immediately detected (resulting in high Bit-Error-Rate and rejected authentication):
+### 1. Multi-Modality Comparative Summary
+| Modality | JPEG Q90 FPR (%) | JPEG Q80 FPR (%) | JPEG Q70 FPR (%) | Combined FPR (%) | Tamper FNR (%) | McNemar p-value |
+|----------|------------------|------------------|------------------|------------------|----------------|-----------------|
+| **CT**   | 7.18%            | 24.69%           | 49.82%           | 27.27%           | 0.00%          | 0.00e+00        |
+| **MRI**  | 54.59%           | 71.89%           | 79.74%           | 68.78%           | 0.20%          | 9.69e-203       |
+| **X-ray**| 1.11%            | 7.59%            | 15.72%           | 8.12%            | 59.37%         | 2.48e-311       |
+| **US**   | 8.12%            | 30.35%           | 47.06%           | 28.56%           | 0.00%          | 0.00e+00        |
 
-![MantiQ-Auth Tampering and Robustness Showcase](output/tampering_showcase.png)
-
-### 2. Active Attack ROC Curve
-The ROC Curve for tampering detection shows an outstanding Area Under Curve (**AUC = 0.9913**), indicating near-perfect separation between benign modifications and actual tampering:
-
-![ROC Curve for Image Tampering Detection](output/tampering_roc.png)
+### 2. Performance Comparison Charts
+- **FPR Robustness under JPEG Compression**:
+  ![FPR Comparison Plot](output/multimodality_fpr_comparison.png)
+- **FNR Security under Localized Tampering**:
+  ![FNR Comparison Plot](output/multimodality_fnr_comparison.png)
 
 ### 3. DICOM Proxy Middleware Performance
 Below are the empirical performance results collected under the simulation suite (averaging over 5 clinical C-STORE cycles using standard chest CT slices):
 
 | Operation / Path | Latency (Mean ± SD) | Net Middleware Overhead | Storage Size Overhead (Bytes) |
 | --- | --- | --- | --- |
-| **Direct Store (Baseline)** | 92.28 ± 11.29 ms | — | — |
-| **Proxy Sign & Store** | 302.21 ± 95.22 ms | +209.93 ms | +3584 bytes (+0.6808%) |
-| **Proxy Verify & Store** | 261.68 ± 15.43 ms | +169.40 ms | +3584 bytes (+0.6808%) |
+| **Direct Store (Baseline)** | 109.34 ± 7.30 ms | — | — |
+| **Proxy Sign & Store** | 338.56 ± 87.90 ms | +229.21 ms | +3584 bytes (+0.68%) |
+| **Proxy Verify & Store** | 278.67 ± 5.87 ms | +169.32 ms | +3584 bytes (+0.68%) |
 
 #### Performance Takeaways:
-- **PQC Overhead:** The additional processing time for ResNet-18 feature extraction, BCH coding, and hybrid signing (ECDSA + ML-DSA-65) is **~209 ms**, which is negligible in typical clinical imaging workflows.
+- **PQC Overhead:** The additional processing time for ResNet-18 feature extraction, BCH coding, and hybrid signing (ECDSA + ML-DSA-65) is **~229 ms**, which is negligible in typical clinical imaging workflows.
 - **Storage Efficiency:** Storing the post-quantum keys and signature payload within standard DICOM private tags adds only **3.5 KB (+0.68%)** of metadata overhead per slice, preserving bandwidth and PACS storage capacity.
 
 ---

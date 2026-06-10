@@ -1,10 +1,10 @@
 {
-  "num_images": 1000,
-  "bootstrap": {
+  "CT": {
+    "num_images": 1000,
     "fpr": {
-      "mean": 0.3021016666666667,
-      "ci_lower": 0.2866666666666667,
-      "ci_upper": 0.319
+      "mean": 0.27274366666666666,
+      "ci_lower": 0.257,
+      "ci_upper": 0.289
     },
     "fnr": {
       "mean": 0.0,
@@ -12,33 +12,159 @@
       "ci_upper": 0.0
     },
     "jpeg_70": {
-      "mean": 0.54147,
-      "ci_lower": 0.512,
-      "ci_upper": 0.571
+      "mean": 0.498225,
+      "ci_lower": 0.467,
+      "ci_upper": 0.532
     },
     "jpeg_80": {
-      "mean": 0.283674,
-      "ci_lower": 0.254,
-      "ci_upper": 0.31
+      "mean": 0.24686000000000002,
+      "ci_lower": 0.221,
+      "ci_upper": 0.274
     },
     "jpeg_90": {
-      "mean": 0.082107,
-      "ci_lower": 0.066,
-      "ci_upper": 0.101
+      "mean": 0.071797,
+      "ci_lower": 0.056,
+      "ci_upper": 0.088
+    },
+    "mcnemar": {
+      "contingency_table": [
+        [
+          1022,
+          2161
+        ],
+        [
+          0,
+          817
+        ]
+      ],
+      "statistic": 2159.0004627487274,
+      "p_value": 0.0
     }
   },
-  "mcnemar": {
-    "contingency_table": [
-      [
-        1016,
-        2078
+  "MRI": {
+    "num_images": 1000,
+    "fpr": {
+      "mean": 0.6878433333333333,
+      "ci_lower": 0.6723333333333333,
+      "ci_upper": 0.705
+    },
+    "fnr": {
+      "mean": 0.0019730000000000004,
+      "ci_lower": 0.0,
+      "ci_upper": 0.005
+    },
+    "jpeg_70": {
+      "mean": 0.797381,
+      "ci_lower": 0.774,
+      "ci_upper": 0.822
+    },
+    "jpeg_80": {
+      "mean": 0.718892,
+      "ci_lower": 0.691,
+      "ci_upper": 0.749
+    },
+    "jpeg_90": {
+      "mean": 0.5458670000000001,
+      "ci_lower": 0.516,
+      "ci_upper": 0.578
+    },
+    "mcnemar": {
+      "contingency_table": [
+        [
+          1004,
+          931
+        ],
+        [
+          2,
+          2063
+        ]
       ],
-      [
-        0,
-        906
-      ]
-    ],
-    "statistic": 2076.000481231954,
-    "p_value": 0.0
+      "statistic": 923.02679528403,
+      "p_value": 9.68593930194569e-203
+    }
+  },
+  "X-ray": {
+    "num_images": 1000,
+    "fpr": {
+      "mean": 0.08115933333333333,
+      "ci_lower": 0.07166666666666667,
+      "ci_upper": 0.09033333333333333
+    },
+    "fnr": {
+      "mean": 0.5937129999999999,
+      "ci_lower": 0.563,
+      "ci_upper": 0.625
+    },
+    "jpeg_70": {
+      "mean": 0.157151,
+      "ci_lower": 0.135,
+      "ci_upper": 0.181
+    },
+    "jpeg_80": {
+      "mean": 0.075934,
+      "ci_lower": 0.061,
+      "ci_upper": 0.092
+    },
+    "jpeg_90": {
+      "mean": 0.011080000000000001,
+      "ci_lower": 0.005,
+      "ci_upper": 0.018
+    },
+    "mcnemar": {
+      "contingency_table": [
+        [
+          506,
+          2656
+        ],
+        [
+          527,
+          311
+        ]
+      ],
+      "statistic": 1422.6779767514922,
+      "p_value": 2.4801880578776e-311
+    }
+  },
+  "Ultrasound": {
+    "num_images": 1000,
+    "fpr": {
+      "mean": 0.28563333333333335,
+      "ci_lower": 0.2703333333333333,
+      "ci_upper": 0.30233333333333334
+    },
+    "fnr": {
+      "mean": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "jpeg_70": {
+      "mean": 0.470618,
+      "ci_lower": 0.441,
+      "ci_upper": 0.502
+    },
+    "jpeg_80": {
+      "mean": 0.303514,
+      "ci_lower": 0.274,
+      "ci_upper": 0.332
+    },
+    "jpeg_90": {
+      "mean": 0.08119499999999999,
+      "ci_lower": 0.065,
+      "ci_upper": 0.099
+    },
+    "mcnemar": {
+      "contingency_table": [
+        [
+          1006,
+          2138
+        ],
+        [
+          0,
+          856
+        ]
+      ],
+      "statistic": 2136.0004677268475,
+      "p_value": 0.0
+    }
   }
 }

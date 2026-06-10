@@ -71,6 +71,15 @@ def main():
     achieved_fpr = None
     if "bootstrap" in stats_results:
         achieved_fpr = stats_results["bootstrap"]["fpr"].get("mean")
+    elif stats_results:
+        # Check if we have modality entries (CT, MRI, X-ray, Ultrasound)
+        fpr_values = []
+        for key, val in stats_results.items():
+            if isinstance(val, dict) and "jpeg_70" in val:
+                fpr_values.append(val["jpeg_70"].get("mean", 0.0))
+        if fpr_values:
+            achieved_fpr = sum(fpr_values) / len(fpr_values)
+            
     if achieved_fpr is None and "robustness_and_attacks" in eval_results:
         # Fallback to direct calculation
         r_a = eval_results["robustness_and_attacks"].get("JPEG Q=70", {})
@@ -81,6 +90,14 @@ def main():
     achieved_fnr = None
     if "bootstrap" in stats_results:
         achieved_fnr = stats_results["bootstrap"]["fnr"].get("mean")
+    elif stats_results:
+        fnr_values = []
+        for key, val in stats_results.items():
+            if isinstance(val, dict) and "fnr" in val:
+                fnr_values.append(val["fnr"].get("mean", 0.0))
+        if fnr_values:
+            achieved_fnr = sum(fnr_values) / len(fnr_values)
+
     if achieved_fnr is None and "robustness_and_attacks" in eval_results:
         r_a = eval_results["robustness_and_attacks"].get("Tampering", {})
         if "hash_match_rate" in r_a:

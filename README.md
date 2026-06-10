@@ -27,6 +27,8 @@ Medical images stored in hospitals face critical vulnerabilities:
 MantiQ-Auth relies purely on **Cryptographic Hash-Based Authentication**. It utilizes deep learning models **only** as deterministic feature extractors, entirely eliminating the reliance on Machine Learning predictive classifiers (like SVMs or CNN classifiers) for the final authentication decision. Authentication is strictly deterministic:
 `Recomputed Hash == Signed Hash AND Signatures Valid → Authentic`.
 
+---
+
 ## 🏗️ System Architecture
 
 MantiQ-Auth consists of four primary stages. The diagram below illustrates the exact flow of data from an input medical image to a verified authentication decision.
@@ -47,7 +49,7 @@ graph TD
         D --> E[Feature Normalization]
         E --> F[Median Quantization to Binary]
         F --> G[Majority Voting Filter]
-        G --> H[BCH-511 t=16 Error Correction]
+        G --> H[BCH-1023 t=16 Error Correction]
         H --> I[SHA3-256 Cryptographic Hash]
     end
     
@@ -75,26 +77,51 @@ graph TD
     class Stage1,Stage2,Stage3,Stage4 stage;
 ```
 
-### Step-by-Step Breakdown
+---
 
-#### 1. Deep Feature Extraction
-The image is passed through a pre-trained **ResNet-18** (or ViT-B/16). The network's weights are completely frozen, acting solely as a deterministic spatial feature extractor to produce a resilient 512-dimensional vector. 
+## 🧮 Mathematical Formulation
 
-#### 2. Robust Perceptual Hashing
-To survive benign operations (like JPEG compression or minor noise) while catching malicious tampering:
-- **Quantization:** The 512-dim continuous vector is binarized using a moving median threshold.
-- **Majority Voting:** A local window filter removes noise-induced bit flips.
-- **BCH Error Correction:** A `BCH(511, 256, t=16)` algorithm encodes the bits. During verification, it acts as a dampener to absorb up to 16 benign bit flips.
-- **SHA3-256:** The BCH-encoded payload is hashed to produce the final, mathematically irreversible digest.
+### 1. Feature Extraction
+Let $I$ be the input medical image. We extract a robust, low-dimensional continuous visual feature representation using a frozen, pretrained ResNet-18 model $\Phi$:
+$$f = \Phi(I) \in \mathbb{R}^d$$
+where $d = 512$ represents the feature vector dimensionality.
 
-#### 3. Hybrid Post-Quantum Signatures
-We secure the hash using a dual-layer approach for backward compatibility and future-proofing:
-- **ECDSA-P256:** Provides immediate trust anchored in current infrastructure.
-- **ML-DSA-65 (Dilithium):** NIST-standardized lattice-based signature securing against quantum adversaries.
-These are bound together in a non-separable combiner, preventing downgrade attacks.
+### 2. Median Quantization & Perceptual Hashing
+To convert the continuous features into a stable binary vector, we apply median-based quantization. For each element $f_i$ in $f$:
+$$b_i = \begin{cases} 1 & \text{if } f_i \ge \text{median}(f) \\ 0 & \text{if } f_i < \text{median}(f) \end{cases} \quad \forall i = 1, \dots, d$$
+This yields a binary fingerprint $b \in \{0, 1\}^d$.
 
-#### 4. Deterministic Verification
-At the receiving end, the process is repeated. The image is accepted **if and only if** the recomputed robust hash matches the signed hash *after* BCH decoding, and both signatures are cryptographically valid.
+### 3. BCH Error Correction & Hash Generation
+To tolerate benign distortions (like JPEG compression or noise) while detecting structural content changes, we apply Bose-Chaudhuri-Hocquenghem (BCH) error-correcting codes. Under parameter set $\text{BCH}(1023, 256, t=16)$ with block size $n=1023$, message length $k=256$, and error correction capability $t=16$:
+$$c = \text{BCH\_Encode}(b) \in \{0, 1\}^n$$
+The final robust perceptual hash $\mathcal{H}$ is computed as the SHA3-256 digest of the codeword $c$:
+$$\mathcal{H} = \text{SHA3-256}(c) \in \{0, 1\}^{256}$$
+
+### 4. Hybrid Signature Generation & Mutually Binding Combiner
+To provide crypto-agile, quantum-resistant authenticity, the perceptual hash is signed using a hybrid scheme. Let $m = \text{SHA256}(\mathcal{H})$ be the signature message digest.
+
+1. **Classical Signature (ECDSA):**
+   $$\sigma_{\text{ECDSA}} = \text{Sign}_{\text{ECDSA}}(m, sk_{\text{ECDSA}})$$
+2. **Post-Quantum Signature (ML-DSA):**
+   $$\sigma_{\text{ML-DSA}} = \text{Sign}_{\text{ML-DSA}}(m, sk_{\text{ML-DSA}})$$
+3. **Mutually Binding Combiner (Silithium):**
+   To prevent downgrade attacks where an attacker strips the post-quantum signature, the signatures are cryptographically bound using a binding hash $h_{\text{bind}}$:
+   $$h_{\text{bind}} = \text{SHA256}(\sigma_{\text{ECDSA}} \parallel \sigma_{\text{ML-DSA}} \parallel m)$$
+   $$\sigma_{\text{hybrid}} = \text{len}(\sigma_{\text{ECDSA}}) \parallel \sigma_{\text{ECDSA}} \parallel \text{len}(\sigma_{\text{ML-DSA}}) \parallel \sigma_{\text{ML-DSA}} \parallel h_{\text{bind}}$$
+
+### 5. Verification Decision Logic
+Upon receiving image $I'$ and signature payload $\sigma_{\text{hybrid}}$, the verifier:
+1. Parses $\sigma_{\text{ECDSA}}$, $\sigma_{\text{ML-DSA}}$, and $h_{\text{bind}}$ from $\sigma_{\text{hybrid}}$.
+2. Recomputes $m = \text{SHA256}(\mathcal{H}_{\text{signed}})$.
+3. Validates the mutual binding:
+   $$\text{SHA256}(\sigma_{\text{ECDSA}} \parallel \sigma_{\text{ML-DSA}} \parallel m) \stackrel{?}{=} h_{\text{bind}}$$
+4. Verifies the component signatures:
+   $$\text{Verify}_{\text{ECDSA}}(m, \sigma_{\text{ECDSA}}, pk_{\text{ECDSA}}) \land \text{Verify}_{\text{ML-DSA}}(m, \sigma_{\text{ML-DSA}}, pk_{\text{ML-DSA}}) \stackrel{?}{=} \text{True}$$
+5. Recomputes the robust hash:
+   $$\mathcal{H}' = \text{SHA3-256}(\text{BCH\_Decode}(b', \text{ecc}_{\text{signed}}))$$
+   $$\mathcal{H}' \stackrel{?}{=} \mathcal{H}_{\text{signed}}$$
+
+Authentication succeeds if and only if all conditions are satisfied.
 
 ---
 
@@ -143,10 +170,6 @@ flowchart TD
     Proxy -->|"Signed C-STORE (Standard DICOM format)"| PACS
     PACS -.->|"Retrieve Request (C-MOVE / C-GET)"| Verification
     Verification -.->|"Delivered to Modality / User"| Modality
-
-    %% Footnote Notes
-    note1["💡 Middleware design isolates crypto logic: No changes required on legacy PACS servers."]
-    note2["⚠️ Proxy is a Single Point of Failure (SPOF): High-availability load balancers recommended for clinical redundancy."]
 ```
 
 ### Network Communication Sequence
@@ -178,11 +201,6 @@ sequenceDiagram
 MantiQ-Auth/
 ├── data/                              # Datasets (Raw, Processed, Tampered, PACS exports)
 ├── src/                               # Core Crypto and Extractor Modules
-│   ├── feature_extraction.py          # ResNet & ViT feature extractors
-│   ├── robust_hash.py                 # Quantization, BCH, and SHA3 pipeline
-│   ├── hybrid_signatures.py           # ECDSA + ML-DSA hybrid signing
-│   ├── verifier.py                    # Hash-based Authentication Gateway
-│   └── tampering_analysis.py          # Post-hoc SVM analysis (Research Only)
 ├── proxy/                             # 📁 Crypto-Agile DICOM Proxy Components
 │   ├── README.md                      # Proxy documentation and network ports
 │   ├── DICOM_HEADER_SPECS.md          # Specs for Group 0x0009 Private Creator tags
@@ -194,10 +212,12 @@ MantiQ-Auth/
 │   ├── run_proxy_benchmark.py         # Benchmarks proxy latency and size overhead
 │   ├── inspect_dicom_crypto.py        # Utility to dump and verify DICOM private tags offline
 │   ├── run_evaluation.py              # Evaluates True Positive / False Positives
-│   └── ...                            
+│   └── attack_simulation.py           # Simulates downgrade, replay, and tampering attacks
 ├── MantiQ_Auth_Final.ipynb            # Interactive complete project demonstration
 └── config.yaml                        # Global pipeline parameters
 ```
+
+---
 
 ## 🚀 Quick Start
 
@@ -209,8 +229,8 @@ cd MantiQ-Auth
 
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
+venv\Scripts\activate   # Windows
+# source venv/bin/activate  # Linux/Mac
 
 pip install -r requirements.txt
 ```
@@ -229,7 +249,7 @@ jupyter notebook MantiQ_Auth_Final.ipynb
 
 Or you can run the command-line evaluation suite to test the cryptographic boundary against tampering and benign distortions:
 ```bash
-python scripts/run_evaluation.py
+python scripts/run_evaluation.py --images data/processed/ct
 ```
 
 ### 4. Run the Crypto-Agile DICOM Proxy Simulation & Benchmark
@@ -242,20 +262,36 @@ To inspect the embedded cryptographic headers on any signed file in the PACS:
 python scripts/inspect_dicom_crypto.py
 ```
 
-### 📊 Benchmark Results
+---
 
+## 📊 Empirical Verification & Visualization Showcase
+
+Below is the visual showcase generated during pipeline execution.
+
+### 1. Tampering and Robustness Showcase
+This plot illustrates the robust hashing result for a medical CT slice. Note that lossy JPEG compression (Q=70) successfully preserves the robust hash (preventing false positives) while localized nodule tampering is immediately detected (resulting in high Bit-Error-Rate and rejected authentication):
+
+![MantiQ-Auth Tampering and Robustness Showcase](output/tampering_showcase.png)
+
+### 2. Active Attack ROC Curve
+The ROC Curve for tampering detection shows an outstanding Area Under Curve (**AUC = 0.9913**), indicating near-perfect separation between benign modifications and actual tampering:
+
+![ROC Curve for Image Tampering Detection](output/tampering_roc.png)
+
+### 3. DICOM Proxy Middleware Performance
 Below are the empirical performance results collected under the simulation suite (averaging over 5 clinical C-STORE cycles using standard chest CT slices):
 
 | Operation / Path | Latency (Mean ± SD) | Net Middleware Overhead | Storage Size Overhead (Bytes) |
 | --- | --- | --- | --- |
-| **Direct Store (Baseline)** | 93.62 ± 4.82 ms | — | — |
-| **Proxy Sign & Store** | 326.17 ± 85.62 ms | +232.55 ms | +3584 bytes (+0.6808%) |
-| **Proxy Verify & Store** | 266.84 ± 12.02 ms | +173.22 ms | +3584 bytes (+0.6808%) |
+| **Direct Store (Baseline)** | 92.28 ± 11.29 ms | — | — |
+| **Proxy Sign & Store** | 302.21 ± 95.22 ms | +209.93 ms | +3584 bytes (+0.6808%) |
+| **Proxy Verify & Store** | 261.68 ± 15.43 ms | +169.40 ms | +3584 bytes (+0.6808%) |
 
 #### Performance Takeaways:
-- **PQC Overhead:** The additional processing time for ResNet-18 feature extraction, BCH coding, and hybrid signing (ECDSA + ML-DSA-65) is **~232 ms**, which is negligible in typical clinical imaging workflows.
+- **PQC Overhead:** The additional processing time for ResNet-18 feature extraction, BCH coding, and hybrid signing (ECDSA + ML-DSA-65) is **~209 ms**, which is negligible in typical clinical imaging workflows.
 - **Storage Efficiency:** Storing the post-quantum keys and signature payload within standard DICOM private tags adds only **3.5 KB (+0.68%)** of metadata overhead per slice, preserving bandwidth and PACS storage capacity.
 
+---
 
 ## ⚙️ Configuration
 
@@ -268,26 +304,22 @@ feature_extraction:
 
 hashing:
   quantization_method: "median"
+  bch_n: 1023                 # Block length (must be 2^m - 1)
   bch_t: 16                   # Max correctable bit-flips for benign compression
   hash_algorithm: "sha3_256"
 
 signatures:
-  mldsa_level: 65             # Post-Quantum Level
+  mldsa_level: 65             # Post-Quantum Security Level
+  combiner: "silithium"       # Options: "concatenation", "silithium"
 ```
 
-## 📊 Evaluation & Datasets
+---
 
-MantiQ-Auth is evaluated primarily on the **LIDC-IDRI** (Lung Image Database Consortium).
-- **False Positive Mitigation**: Using BCH(t=16) error correction, benign modifications like `JPEG Q=70` correctly result in a **Hash Match**.
-- **True Positive Detection**: Local tampering (such as nodule removal), replay attacks, and downgrade attacks consistently exceed the BCH correction boundary, resulting in a **Hash Mismatch** and authentication failure.
-
-*(For detailed False-Positive / True-Positive matrix tables, refer to the outputs generated by `run_evaluation.py`)*.
-
-### 📈 BCH Robustness & Bit-Flip Analysis
+## 📈 BCH Robustness & Bit-Flip Analysis
 
 A core academic contribution of this work is the empirical selection of the error-correcting boundary to separate benign image processing from malicious tampering.
 
-We utilize a **BCH(1023, 512, t=16)** code. To substantiate this configuration in a thesis/dissertation, the system evaluation maps the relationship between lossy compression ratios and feature bit-flips:
+We utilize a **BCH(1023, 256, t=16)** code. To substantiate this configuration in a thesis/dissertation, the system evaluation maps the relationship between lossy compression ratios and feature bit-flips:
 
 - **Benign Distortions (JPEG Quality vs. Bit Flips):** As the JPEG compression quality decreases, the number of bit flips in the extracted binary feature vector increases. Empirically, at a standard medical image compression of `JPEG Q=70`, the bit-flip count remains below the $t=16$ threshold, meaning the BCH decoder successfully repairs all errors, preserving the **Hash Match** (preventing false positives).
 - **Malicious Tampering Boundary:** Localized tampering (e.g., deleting or inserting a 15x15 pixel lung nodule) alters the ResNet-18 feature vectors significantly, triggering **> 40 bit flips**. This drastically exceeds the $t=16$ correction boundary, ensuring a **Hash Mismatch** (guaranteeing true positive detection).
@@ -297,4 +329,4 @@ We utilize a **BCH(1023, 512, t=16)** code. To substantiate this configuration i
 
 ---
 **License**: MIT  
-**Target Submission**: Q1 Journals (IEEE TIFS / Cybersecurity)
+**Target Submission**: Q1 Journals (IEEE TIFS / IEEE Transactions on Information Forensics and Security)
